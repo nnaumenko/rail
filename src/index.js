@@ -11,6 +11,277 @@ const screenLayout = {
   railHeight: 8
 }
 
+///////////////////////////////////////////////////////////////////////
+// Import of all images and sounds used by this animation.
+// initImageInventory and initSoundInventory both return an 
+// Assets.Inventory object
+///////////////////////////////////////////////////////////////////////
+
+import passenger_locomotives_3 from "./assets/passenger_locomotives/loco_3.png";
+import passenger_locomotives_3_blue from "./assets/passenger_locomotives/loco_3_blue.png";
+import passenger_locomotives_3_green from "./assets/passenger_locomotives/loco_3_green.png";
+import passenger_locomotives_3_red from "./assets/passenger_locomotives/loco_3_red.png";
+import passenger_locomotives_3_tan from "./assets/passenger_locomotives/loco_3_tan.png";
+
+import freight_locomotives_1_2_blue from "./assets/freight_locomotives/loco_freight_1_2_blue.png";
+import freight_locomotives_1_2_gray from "./assets/freight_locomotives/loco_freight_1_2_gray.png";
+import freight_locomotives_1_2_green from "./assets/freight_locomotives/loco_freight_1_2_green.png";
+import freight_locomotives_1_2_red from "./assets/freight_locomotives/loco_freight_1_2_red.png";
+import freight_locomotives_1_2_yellow from "./assets/freight_locomotives/loco_freight_1_2_yellow.png";
+import freight_locomotives_2_blue from "./assets/freight_locomotives/loco_freight_2_blue.png";
+import freight_locomotives_2_green from "./assets/freight_locomotives/loco_freight_2_green.png";
+import freight_locomotives_2_tan from "./assets/freight_locomotives/loco_freight_2_tan.png";
+
+import passenger_wagons_1a from "./assets/passenger_wagons/passenger_wagon_1a.png";
+import passenger_wagons_1b from "./assets/passenger_wagons/passenger_wagon_1b.png";
+import passenger_wagons_1c from "./assets/passenger_wagons/passenger_wagon_1c.png";
+import passenger_wagons_1d from "./assets/passenger_wagons/passenger_wagon_1d.png";
+
+import containter_wagons_blue from "./assets/containter_wagons/container-blue.png";
+import containter_wagons_brown from "./assets/containter_wagons/container-brown.png";
+import containter_wagons_green from "./assets/containter_wagons/container-green.png";
+import containter_wagons_purple from "./assets/containter_wagons/container-purple.png";
+import containter_wagons_red from "./assets/containter_wagons/container-red.png";
+import containter_wagons_tan from "./assets/containter_wagons/container-tan.png";
+import containter_wagons_white from "./assets/containter_wagons/container-white.png";
+import containter_wagons_yellow from "./assets/containter_wagons/container-yellow.png";
+
+import car_wagons_empty from "./assets/freight_wagons/car_transporter-empty.png";
+
+import covered_wagon_blue from "./assets/freight_wagons/covered_wagon-blue.png";
+import covered_wagon_brown from "./assets/freight_wagons/covered_wagon-brown.png";
+import covered_wagon_green from "./assets/freight_wagons/covered_wagon-green.png";
+import covered_wagon_red from "./assets/freight_wagons/covered_wagon-red.png";
+
+import gondola_wagon_blue from "./assets/freight_wagons/gondola-blue.png";
+import gondola_wagon_brown from "./assets/freight_wagons/gondola-brown.png";
+import gondola_wagon_green from "./assets/freight_wagons/gondola-green.png";
+import gondola_wagon_red from "./assets/freight_wagons/gondola-red.png";
+
+import hopper_wagon_blue from "./assets/freight_wagons/hopper-blue.png";
+import hopper_wagon_red from "./assets/freight_wagons/hopper-red.png";
+import hopper_wagon_tan from "./assets/freight_wagons/hopper-tan.png";
+import hopper_wagon_white from "./assets/freight_wagons/hopper-white.png";
+import hopper_wagon_yellow from "./assets/freight_wagons/hopper-yellow.png";
+
+import open_wagon_blue from "./assets/freight_wagons/open_wagon-blue.png";
+import open_wagon_gray from "./assets/freight_wagons/open_wagon-gray.png";
+import open_wagon_green from "./assets/freight_wagons/open_wagon-green.png";
+import open_wagon_red from "./assets/freight_wagons/open_wagon-red.png";
+
+import refrigerator_wagon_long_white from "./assets/freight_wagons/refrigerator_long-white.png";
+import refrigerator_wagon_white from "./assets/freight_wagons/refrigerator-white.png";
+
+import skeleton_wagon from "./assets/freight_wagons/skeleton-empty.png";
+
+function initImageInventory() {
+  var img = new Assets.Inventory();
+
+  img.addType("passenger_locomotive", [
+      passenger_locomotives_3
+  ], { leftCoupling: 12, rightCoupling: 12 });
+  img.addType("passenger_locomotive", [
+      passenger_locomotives_3_blue,
+  ], { leftCoupling: 12, rightCoupling: 12 });
+  img.addType("passenger_locomotive", [
+      passenger_locomotives_3_green,
+  ], { leftCoupling: 12, rightCoupling: 12 });
+  img.addType("passenger_locomotive", [
+      passenger_locomotives_3_red,
+  ], { leftCoupling: 12, rightCoupling: 12 });
+  img.addType("passenger_locomotive", [
+      passenger_locomotives_3_tan,
+  ], { leftCoupling: 12, rightCoupling: 12 });
+
+  img.addType("freight_locomotives", [
+      freight_locomotives_1_2_blue
+  ]);
+  img.addType("freight_locomotives", [
+      freight_locomotives_1_2_gray
+  ]);
+  img.addType("freight_locomotives", [
+      freight_locomotives_1_2_green
+  ]);
+  img.addType("freight_locomotives", [
+      freight_locomotives_1_2_red
+  ]);
+  img.addType("freight_locomotives", [
+      freight_locomotives_1_2_yellow
+  ]);
+  img.addType("freight_locomotives", [
+      freight_locomotives_2_blue
+  ]);
+  img.addType("freight_locomotives", [
+      freight_locomotives_2_green
+  ]);
+  img.addType("freight_locomotives", [
+      freight_locomotives_2_tan
+  ]);
+
+  img.addType("passenger_wagon", [
+      passenger_wagons_1a,
+      passenger_wagons_1b,
+      passenger_wagons_1c,
+      passenger_wagons_1d
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  img.addType("container_wagon", [
+      containter_wagons_blue
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("container_wagon", [
+      containter_wagons_brown
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("container_wagon", [
+      containter_wagons_green
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("container_wagon", [
+      containter_wagons_purple
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("container_wagon", [
+      containter_wagons_red
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("container_wagon", [
+      containter_wagons_tan
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("container_wagon", [
+      containter_wagons_white
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("container_wagon", [
+      containter_wagons_yellow
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  img.addType("car_wagon", [
+      car_wagons_empty
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  img.addType("covered_wagon", [
+      covered_wagon_blue
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("covered_wagon", [
+      covered_wagon_brown
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("covered_wagon", [
+      covered_wagon_green
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("covered_wagon", [
+      covered_wagon_red
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  img.addType("gondola_wagon", [
+      gondola_wagon_blue
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("gondola_wagon", [
+      gondola_wagon_brown
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("gondola_wagon", [
+      gondola_wagon_green
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("gondola_wagon", [
+      gondola_wagon_red
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  img.addType("hopper_wagon", [
+      hopper_wagon_blue
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("hopper_wagon", [
+      hopper_wagon_red
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("hopper_wagon", [
+      hopper_wagon_tan
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("hopper_wagon", [
+      hopper_wagon_white
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("hopper_wagon", [
+      hopper_wagon_yellow
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  img.addType("open_wagon", [
+      open_wagon_blue
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("open_wagon", [
+      open_wagon_gray
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("open_wagon", [
+      open_wagon_green
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("open_wagon", [
+      open_wagon_red
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  
+  img.addType("refrigerator_wagon", [
+      refrigerator_wagon_long_white
+  ], { leftCoupling: 8, rightCoupling: 5 });
+  img.addType("refrigerator_wagon", [
+      refrigerator_wagon_white
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  img.addType("skeleton_wagon", [
+      skeleton_wagon
+  ], { leftCoupling: 8, rightCoupling: 5 });
+
+  return img;
+};
+
+import snd_locomotive_1 from "./assets/train_sounds/train_in_out1.mp3";
+import snd_train_inout_1 from "./assets/train_sounds/train_in_out1.mp3";
+import snd_train_inout_2 from "./assets/train_sounds/train_in_out2.mp3";
+import snd_train_loop_1 from "./assets/train_sounds/train_loop1.mp3";
+import snd_wheels_1 from "./assets/train_sounds/wheels_5a.mp3";
+import snd_wheels_2 from "./assets/train_sounds/wheels_5b.mp3";
+import snd_wheels_3 from "./assets/train_sounds/wheels_5c.mp3";
+import snd_wheels_4 from "./assets/train_sounds/wheels_5d.mp3";
+import snd_wheels_5 from "./assets/train_sounds/wheels_5e.mp3";
+import snd_wheels_6 from "./assets/train_sounds/wheels_5f.mp3";
+import snd_wheels_7 from "./assets/train_sounds/wheels_5g.mp3";
+import snd_wheels_inout_1 from "./assets/train_sounds/wheels2_5a.mp3";
+import snd_wheels_inout_2 from "./assets/train_sounds/wheels2_5b.mp3";
+import snd_wheels_inout_3 from "./assets/train_sounds/wheels2_5c.mp3";
+import snd_wheels_inout_4 from "./assets/train_sounds/wheels2_5d.mp3";
+import snd_wheels_inout_5 from "./assets/train_sounds/wheels2_5e.mp3";
+import snd_wheels_inout_6 from "./assets/train_sounds/wheels2_5f.mp3";
+import snd_wheels_inout_7 from "./assets/train_sounds/wheels2_5g.mp3";
+
+function initSoundInventory() {
+    var snd = new Assets.Inventory();
+  
+    snd.addType("locomotive", [
+        snd_locomotive_1
+    ]);
+  
+    snd.addType("train_inout", [
+        snd_train_inout_1,
+        snd_train_inout_2
+    ]);
+
+    snd.addType("train_loop", [
+        snd_train_loop_1
+    ]);
+
+    snd.addType("wheels", [
+        snd_wheels_1,
+        snd_wheels_2,
+        snd_wheels_3,
+        snd_wheels_4,
+        snd_wheels_5,
+        snd_wheels_6,
+        snd_wheels_7
+    ]);
+
+    snd.addType("wheels_inout", [
+        snd_wheels_inout_1,
+        snd_wheels_inout_2,
+        snd_wheels_inout_3,
+        snd_wheels_inout_4,
+        snd_wheels_inout_5,
+        snd_wheels_inout_6,
+        snd_wheels_inout_7
+    ]);
+
+    return snd;
+};
+
+
 var timerText
 
 ///////////////////////////////////////////////////////////////////////
@@ -303,7 +574,7 @@ MainScene.prototype.update = function () {
 console.info("Starting up")
 
 console.debug("Initialising images")
-var img = Assets.initImageInventory()
+var img = initImageInventory()
 
 function getSeed() {
   const n = parseInt(window.location.hash.substring(1), 10)
@@ -333,67 +604,3 @@ var config = {
   scene: new MainScene(img, getSeed()),
 };
 var gm = new Phaser.Game(config);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-var rng = new Random.MT( getSeed() );
-
-console.debug("Generating landscape");
-let landscape = Landscape.generateLandscape(img, rng);
-
-import logoImg from "./assets/logo.png";
-
-var train = Train.generateTrain(img, rng);
-console.log(train);
-
-const config = {
-  type: Phaser.AUTO,
-  parent: "phaser-example",
-  width: 800,
-  height: 600,
-  scene: {
-    preload: preload,
-    create: create
-  }
-};
-
-const game = new Phaser.Game(config);
-
-function preload() {
-  this.load.image("logo", logoImg);
-}
-
-function create() {
-  const logo = this.add.image(400, 150, "logo");
-
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
-}
-*/
