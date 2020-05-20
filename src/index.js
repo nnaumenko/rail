@@ -1,3 +1,11 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright (C) 2020 Nick Naumenko (https://gitlab.com/nnaumenko, 
+// https:/github.com/nnaumenko)
+// All rights reserved.
+// This software may be modified and distributed under the terms of the MIT 
+// license. See the LICENSE file for details.
+///////////////////////////////////////////////////////////////////////////////
+
 import Phaser from "phaser";
 import Random from "rng";
 import Assets from "./assets.js";
@@ -5,10 +13,10 @@ import Train from "./train.js";
 import Landscape from "./landscape.js";
 
 const screenLayout = {
-  width: 1024,
-  height: 576,
-  groundHeight: 480,
-  railHeight: 8
+    width: 1024,
+    height: 576,
+    groundHeight: 480,
+    railHeight: 8
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -75,152 +83,152 @@ import refrigerator_wagon_white from "./assets/freight_wagons/refrigerator-white
 import skeleton_wagon from "./assets/freight_wagons/skeleton-empty.png";
 
 function initImageInventory() {
-  var img = new Assets.Inventory();
+    var img = new Assets.Inventory();
 
-  img.addType("passenger_locomotive", [
-      passenger_locomotives_3
-  ], { leftCoupling: 12, rightCoupling: 12 });
-  img.addType("passenger_locomotive", [
-      passenger_locomotives_3_blue,
-  ], { leftCoupling: 12, rightCoupling: 12 });
-  img.addType("passenger_locomotive", [
-      passenger_locomotives_3_green,
-  ], { leftCoupling: 12, rightCoupling: 12 });
-  img.addType("passenger_locomotive", [
-      passenger_locomotives_3_red,
-  ], { leftCoupling: 12, rightCoupling: 12 });
-  img.addType("passenger_locomotive", [
-      passenger_locomotives_3_tan,
-  ], { leftCoupling: 12, rightCoupling: 12 });
+    img.addType("passenger_locomotive", [
+        passenger_locomotives_3
+    ], { leftCoupling: 12, rightCoupling: 12 });
+    img.addType("passenger_locomotive", [
+        passenger_locomotives_3_blue,
+    ], { leftCoupling: 12, rightCoupling: 12 });
+    img.addType("passenger_locomotive", [
+        passenger_locomotives_3_green,
+    ], { leftCoupling: 12, rightCoupling: 12 });
+    img.addType("passenger_locomotive", [
+        passenger_locomotives_3_red,
+    ], { leftCoupling: 12, rightCoupling: 12 });
+    img.addType("passenger_locomotive", [
+        passenger_locomotives_3_tan,
+    ], { leftCoupling: 12, rightCoupling: 12 });
 
-  img.addType("freight_locomotives", [
-      freight_locomotives_1_2_blue
-  ]);
-  img.addType("freight_locomotives", [
-      freight_locomotives_1_2_gray
-  ]);
-  img.addType("freight_locomotives", [
-      freight_locomotives_1_2_green
-  ]);
-  img.addType("freight_locomotives", [
-      freight_locomotives_1_2_red
-  ]);
-  img.addType("freight_locomotives", [
-      freight_locomotives_1_2_yellow
-  ]);
-  img.addType("freight_locomotives", [
-      freight_locomotives_2_blue
-  ]);
-  img.addType("freight_locomotives", [
-      freight_locomotives_2_green
-  ]);
-  img.addType("freight_locomotives", [
-      freight_locomotives_2_tan
-  ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_1_2_blue
+    ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_1_2_gray
+    ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_1_2_green
+    ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_1_2_red
+    ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_1_2_yellow
+    ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_2_blue
+    ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_2_green
+    ]);
+    img.addType("freight_locomotives", [
+        freight_locomotives_2_tan
+    ]);
 
-  img.addType("passenger_wagon", [
-      passenger_wagons_1a,
-      passenger_wagons_1b,
-      passenger_wagons_1c,
-      passenger_wagons_1d
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("passenger_wagon", [
+        passenger_wagons_1a,
+        passenger_wagons_1b,
+        passenger_wagons_1c,
+        passenger_wagons_1d
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  img.addType("container_wagon", [
-      containter_wagons_blue
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("container_wagon", [
-      containter_wagons_brown
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("container_wagon", [
-      containter_wagons_green
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("container_wagon", [
-      containter_wagons_purple
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("container_wagon", [
-      containter_wagons_red
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("container_wagon", [
-      containter_wagons_tan
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("container_wagon", [
-      containter_wagons_white
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("container_wagon", [
-      containter_wagons_yellow
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_purple
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_tan
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_white
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_yellow
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  img.addType("car_wagon", [
-      car_wagons_empty
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("car_wagon", [
+        car_wagons_empty
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  img.addType("covered_wagon", [
-      covered_wagon_blue
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("covered_wagon", [
-      covered_wagon_brown
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("covered_wagon", [
-      covered_wagon_green
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("covered_wagon", [
-      covered_wagon_red
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  img.addType("gondola_wagon", [
-      gondola_wagon_blue
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("gondola_wagon", [
-      gondola_wagon_brown
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("gondola_wagon", [
-      gondola_wagon_green
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("gondola_wagon", [
-      gondola_wagon_red
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("gondola_wagon", [
+        gondola_wagon_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("gondola_wagon", [
+        gondola_wagon_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("gondola_wagon", [
+        gondola_wagon_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("gondola_wagon", [
+        gondola_wagon_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  img.addType("hopper_wagon", [
-      hopper_wagon_blue
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("hopper_wagon", [
-      hopper_wagon_red
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("hopper_wagon", [
-      hopper_wagon_tan
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("hopper_wagon", [
-      hopper_wagon_white
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("hopper_wagon", [
-      hopper_wagon_yellow
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_tan
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_white
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_yellow
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  img.addType("open_wagon", [
-      open_wagon_blue
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("open_wagon", [
-      open_wagon_gray
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("open_wagon", [
-      open_wagon_green
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("open_wagon", [
-      open_wagon_red
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  
-  img.addType("refrigerator_wagon", [
-      refrigerator_wagon_long_white
-  ], { leftCoupling: 8, rightCoupling: 5 });
-  img.addType("refrigerator_wagon", [
-      refrigerator_wagon_white
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_gray
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  img.addType("skeleton_wagon", [
-      skeleton_wagon
-  ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("refrigerator_wagon", [
+        refrigerator_wagon_long_white
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("refrigerator_wagon", [
+        refrigerator_wagon_white
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-  return img;
+    img.addType("skeleton_wagon", [
+        skeleton_wagon
+    ], { leftCoupling: 8, rightCoupling: 5 });
+
+    return img;
 };
 
 import snd_locomotive_1 from "./assets/train_sounds/train_in_out1.mp3";
@@ -244,11 +252,11 @@ import snd_wheels_inout_7 from "./assets/train_sounds/wheels2_5g.mp3";
 
 function initSoundInventory() {
     var snd = new Assets.Inventory();
-  
+
     snd.addType("locomotive", [
         snd_locomotive_1
     ]);
-  
+
     snd.addType("train_inout", [
         snd_train_inout_1,
         snd_train_inout_2
@@ -296,197 +304,197 @@ var timerText
 ///////////////////////////////////////////////////////////////////////
 
 class TrainAnimation {
-  constructor(scene, img) {
-      this.scene = scene;
-      this.img = img;
-      this.trainActive = false;
-      this.loadedImages = new Set();
-      this.loadedSounds = new Set();
-      this.playingSounds = new Array();
-  }
-  get active() { return this.trainActive; }
-  get timer() {
-      if (this.timedEvent === undefined) return undefined
-      return this.timedEvent.getProgress();
-  }
-  set railsPosition(pos) { this.screenLayout.posRailsY = pos; }
-  get railsPosition() { return this.screenLayout.posRailsY; }
-  set leftPosition(pos) { this.screenLayout.posLeftX = pos; }
-  get leftPosition() { return this.screenLayout.posLeftX; }
-  set rightPosition(pos) { this.screenLayout.posRightX = pos; }
-  get rightPosition() { return this.screenLayout.posRightX; }
-  //TODO: convert to private fields
-  scene;
-  img;
-  trainGroup;
-  triggerGroup;
-  timedEvent;
-  trainActive;
-  screenLayout = {
-      posRailsY: 576,
-      posLeftX: 0,
-      posRightX: 1024,
-      scale: 1,
-  };
-  sndLoop;
-  loadedImages;
-  playingSounds;
-  loadedSounds;
+    constructor(scene, img) {
+        this.#scene = scene;
+        this.#imageInventory = img;
+        this.#trainActive = false;
+        this.#loadedImages = new Set();
+        this.#loadedSounds = new Set();
+        this.#playingSounds = new Array();
+    }
+    get active() { return this.#trainActive; }
+    get timer() {
+        if (this.timedEvent === undefined) return undefined
+        return this.timedEvent.getProgress();
+    }
+    set railsPosition(pos) { this.#screenLayout.posRailsY = pos; }
+    get railsPosition() { return this.#screenLayout.posRailsY; }
+    set leftPosition(pos) { this.#screenLayout.posLeftX = pos; }
+    get leftPosition() { return this.#screenLayout.posLeftX; }
+    set rightPosition(pos) { this.#screenLayout.posRightX = pos; }
+    get rightPosition() { return this.#screenLayout.posRightX; }
 
-setup(trainConfig) {
-  console.debug("Setting up train")
-  if (this.active) this.remove()
-  this.trainActive = true;
+    #scene;
+    #imageInventory;
+    #trainGroup;
+    //#triggerGroup;
+    #timedEvent;
+    #trainActive;
+    #screenLayout = {
+        posRailsY: 576,
+        posLeftX: 0,
+        posRightX: 1024,
+        scale: 1,
+    };
+    #sndLoop;
+    #loadedImages;
+    #playingSounds;
+    #loadedSounds;
 
-  console.log(trainConfig);
+    setup(trainConfig) {
+        console.debug("Setting up train")
+        if (this.active) this.remove()
+        this.#trainActive = true;
 
-  const scale = this.screenLayout.scale;
-  const posY = this.screenLayout.posRailsY;
-  const posX1 = this.screenLayout.posLeftX;
-  const posX2 = this.screenLayout.posRightX;
-  const sizeX = posX2 - posX1;
+        console.debug("Train configuration", trainConfig);
 
-  let playsound = function (snd) {
-      //this.playingSounds.push(snd);
-      snd.play();
-  }
+        const scale = this.#screenLayout.scale;
+        const posY = this.#screenLayout.posRailsY;
+        const posX1 = this.#screenLayout.posLeftX;
+        const posX2 = this.#screenLayout.posRightX;
+        const sizeX = posX2 - posX1;
 
-  let stopsound = function (snd) {
-      snd.stop();
-  }
+        let playsound = function (snd) {
+            //this.playingSounds.push(snd);
+            snd.play();
+        }
 
-  let playOutroSound = function () {
-      console.debug('Playing outro sound');
-      let snd = this.scene.sound.add('train_in_out2');
-      snd.once('complete', this.remove, this);
-      snd.play();
-  }
+        let stopsound = function (snd) {
+            snd.stop();
+        }
 
-  let createTrainInScene = function () {
+        let playOutroSound = function () {
+            console.debug('Playing outro sound');
+            let snd = this.#scene.sound.add('train_in_out2');
+            snd.once('complete', this.remove, this);
+            snd.play();
+        }
 
-      console.debug('Creating train');
+        let createTrainInScene = function () {
 
-      this.trainGroup = this.scene.physics.add.group();
+            console.debug('Creating train');
 
-      let trainLen = 0;
-      let previousCoupling = 0;
+            this.#trainGroup = this.#scene.physics.add.group();
 
-      let sndFirst = this.scene.sound.add('wheels0');
-      sndFirst.rate = trainConfig.speed / 750;
-      playsound(sndFirst);
+            let trainLen = 0;
+            let previousCoupling = 0;
 
-      trainConfig.train.forEach(function(id, i, arr) {
-          const sprName = 'tr_img_' + String(id);
-          const attr = img.getAttributes(id);
-          const sprWidth = this.scene.textures.get(sprName).source[0].width;
-          if (trainConfig.direction) {
-              this.trainGroup.create(posX2 + 1 + trainLen, posY, sprName);
-          }
-          trainLen += (sprWidth - attr.leftCoupling - previousCoupling) * scale;
-          if (!trainConfig.direction) {
-              this.trainGroup.create(posX1 - 1 - trainLen, posY, sprName);
-          }
-          
-          previousCoupling = attr.rightCoupling;
+            let sndFirst = this.#scene.sound.add('wheels0');
+            sndFirst.rate = trainConfig.speed / 750;
+            playsound(sndFirst);
 
-          if (i != (arr.length - 1)) {
-              var snd = this.scene.sound.add('wheels1');
-          } else {
-              var snd = this.scene.sound.add('wheels3');
-          }
-          snd.rate = trainConfig.speed / 750;
-          let soundDelay = (trainLen - sizeX / 2) / trainConfig.speed / scale * 1000;
-          this.scene.time.delayedCall(soundDelay, playsound, [snd], this);
-          if (img.getCategoryById(id) == 'passenger_locomotive' ||
-              img.getCategoryById(id) == 'freight_locomotive')
-          {
-              let sndLoco = this.scene.sound.add('locomotive1');
-              let soundLocoDelay = soundDelay - sprWidth * scale;
-              if (soundLocoDelay < 0) soundLocoDelay = 0;
-              this.scene.time.delayedCall(soundLocoDelay, playsound, [sndLoco], this);
-          }
-      }.bind(this));
-      this.scene.time.delayedCall((trainLen - sizeX / 2) / trainConfig.speed / scale * 1000, stopsound, [this.sndLoop], this);
-      this.scene.time.delayedCall((trainLen - sizeX / 2) / trainConfig.speed / scale * 1000, playOutroSound, [], this);
+            trainConfig.train.forEach(function (id, i, arr) {
+                const sprName = 'tr_img_' + String(id);
+                const attr = this.#imageInventory.getAttributes(id);
+                const sprWidth = this.#scene.textures.get(sprName).source[0].width;
+                if (trainConfig.direction) {
+                    this.#trainGroup.create(posX2 + 1 + trainLen, posY, sprName);
+                }
+                trainLen += (sprWidth - attr.leftCoupling - previousCoupling) * scale;
+                if (!trainConfig.direction) {
+                    this.#trainGroup.create(posX1 - 1 - trainLen, posY, sprName);
+                }
 
-      Phaser.Actions.Call(this.trainGroup.getChildren(), function (spr) {
-          if (!trainConfig.direction) {
-              spr.setVelocity(trainConfig.speed, 0);
-              spr.setScale(scale);
-              spr.setOrigin(0, 1);
-          } else {
-              spr.setVelocity(-trainConfig.speed, 0);
-              spr.setScale(-scale, scale);
-              spr.setOrigin(1, 1);
-          }
-      })
+                previousCoupling = attr.rightCoupling;
 
-      //this.triggerGroup = this.scene.physics.add.staticGroup();
-      //this.triggerGroup.create(posX2 + 1 + trainLen, posY, 'placeholder');
-      //this.triggerGroup.onOverlap = true;
+                if (i != (arr.length - 1)) {
+                    var snd = this.#scene.sound.add('wheels1');
+                } else {
+                    var snd = this.#scene.sound.add('wheels3');
+                }
+                snd.rate = trainConfig.speed / 750;
+                let soundDelay = (trainLen - sizeX / 2) / trainConfig.speed / scale * 1000;
+                this.#scene.time.delayedCall(soundDelay, playsound, [snd], this);
+                if (this.#imageInventory.getCategoryById(id) == 'passenger_locomotive' ||
+                    this.#imageInventory.getCategoryById(id) == 'freight_locomotive') {
+                    let sndLoco = this.#scene.sound.add('locomotive1');
+                    let soundLocoDelay = soundDelay - sprWidth * scale;
+                    if (soundLocoDelay < 0) soundLocoDelay = 0;
+                    this.#scene.time.delayedCall(soundLocoDelay, playsound, [sndLoco], this);
+                }
+            }.bind(this));
+            this.#scene.time.delayedCall((trainLen - sizeX / 2) / trainConfig.speed / scale * 1000, stopsound, [this.sndLoop], this);
+            this.#scene.time.delayedCall((trainLen - sizeX / 2) / trainConfig.speed / scale * 1000, playOutroSound, [], this);
 
-      //                this.scene.physics.add.overlap(this.triggerGroup, this.trainGroup, playOutroSound, null, this);
-  }
+            Phaser.Actions.Call(this.#trainGroup.getChildren(), function (spr) {
+                if (!trainConfig.direction) {
+                    spr.setVelocity(trainConfig.speed, 0);
+                    spr.setScale(scale);
+                    spr.setOrigin(0, 1);
+                } else {
+                    spr.setVelocity(-trainConfig.speed, 0);
+                    spr.setScale(-scale, scale);
+                    spr.setOrigin(1, 1);
+                }
+            })
 
-  function playIntroSound() {
-    console.debug('Playing intro sound');
-      this.sndLoop = this.scene.sound.add('trainloop', { loop: true });
-      let snd = this.scene.sound.add('train_in_out1');
-      snd.once('complete', createTrainInScene, this);
-      snd.play();
-      this.timedEvent = this.scene.time.delayedCall(3000, playsound, [this.sndLoop], this);
-  }
+            //this.triggerGroup = this.scene.physics.add.staticGroup();
+            //this.triggerGroup.create(posX2 + 1 + trainLen, posY, 'placeholder');
+            //this.triggerGroup.onOverlap = true;
 
-  this.scene.load.once('complete', function () {
-    console.debug('Load complete');
-    this.timedEvent = this.scene.time.delayedCall(
-          trainConfig.delay,
-          playIntroSound,
-          [],
-          this);
-  }, this);
+            //this.scene.physics.add.overlap(this.triggerGroup, this.trainGroup, playOutroSound, null, this);
+        }
 
-  //Phaser does not care if the same image is loaded repeatedly
-  console.debug('Loading train images');
-  trainConfig.train.forEach(id => {
-      this.scene.load.image("tr_img_" + String(id), img.getPathById(id));
-      this.loadedImages.add("tr_img_" + String(id));
-  })
+        function playIntroSound() {
+            console.debug('Playing intro sound');
+            this.sndLoop = this.#scene.sound.add('trainloop', { loop: true });
+            let snd = this.#scene.sound.add('train_in_out1');
+            snd.once('complete', createTrainInScene, this);
+            snd.play();
+            this.timedEvent = this.#scene.time.delayedCall(3000, playsound, [this.sndLoop], this);
+        }
 
-  console.debug('Loading train sounds');
-  this.scene.load.audio('wheels0', ['assets/train_sounds/wheels2_5d.mp3']);
-  this.scene.load.audio('wheels1', ['assets/train_sounds/wheels_5a.mp3']);
-  this.scene.load.audio('wheels2', ['assets/train_sounds/wheels_5b.mp3']);
-  this.scene.load.audio('wheels3', ['assets/train_sounds/wheels2_5c.mp3']);
-  this.scene.load.audio('trainloop', ['assets/train_sounds/train_loop1.mp3']);
-  this.scene.load.audio('train_in_out1', ['assets/train_sounds/train_in_out1.mp3']);
-  this.scene.load.audio('train_in_out2', ['assets/train_sounds/train_in_out2.mp3']);
-  this.scene.load.audio('locomotive1', ['assets/train_sounds/locomotive1.mp3']);
-  this.scene.load.start();
-}
+        this.#scene.load.once('complete', function () {
+            console.debug('Load complete');
+            this.#timedEvent = this.#scene.time.delayedCall(
+                trainConfig.delay,
+                playIntroSound,
+                [],
+                this);
+        }, this);
 
-remove() {
-  console.debug("Removing train")
-  if (this.trainGroup !== undefined) this.trainGroup.clear(true, true)
-  if (this.triggerGroup !== undefined) this.triggerGroup.clear(true, true)
-  if (this.timedEvent !== undefined) this.timedEvent.remove()
-  if (this.sndLoop !== undefined) this.sndLoop.stop();
-  this.loadedImages.forEach(imgId => this.scene.textures.remove(imgId));
-  this.loadedImages = new Set();
-  this.playingSounds.forEach(snd => snd.stop());
-  this.playingSounds = new Array();
-  this.loadedSounds.forEach(sndId => this.scene.sound.removeByKey(sndId));
-  this.loadedSounds = new Set();
+        //Phaser does not care if the same image is loaded multiple times
+        console.debug('Loading train images');
+        trainConfig.train.forEach(id => {
+            const imgPath = this.#imageInventory.getPathById(id);
+            this.#scene.load.image("tr_img_" + String(id), imgPath);
+            this.#loadedImages.add("tr_img_" + String(id));
+        });
 
-  this.scene.sound.removeByKey('wheels1');
-  this.scene.sound.removeByKey('wheels2');
-  this.scene.sound.removeByKey('wheels3');
-  this.scene.sound.removeByKey('trainloop');
-  this.scene.sound.removeByKey('train_in_out1');
-  this.scene.sound.removeByKey('train_in_out2');
-  this.scene.sound.removeByKey('locomotive1');
-  this.trainActive = false;
-}
+        console.debug('Loading train sounds');
+        this.#scene.load.audio('wheels0', ['assets/train_sounds/wheels2_5d.mp3']);
+        this.#scene.load.audio('wheels1', ['assets/train_sounds/wheels_5a.mp3']);
+        this.#scene.load.audio('wheels2', ['assets/train_sounds/wheels_5b.mp3']);
+        this.#scene.load.audio('wheels3', ['assets/train_sounds/wheels2_5c.mp3']);
+        this.#scene.load.audio('trainloop', ['assets/train_sounds/train_loop1.mp3']);
+        this.#scene.load.audio('train_in_out1', ['assets/train_sounds/train_in_out1.mp3']);
+        this.#scene.load.audio('train_in_out2', ['assets/train_sounds/train_in_out2.mp3']);
+        this.#scene.load.audio('locomotive1', ['assets/train_sounds/locomotive1.mp3']);
+        this.#scene.load.start();
+    }
+
+    remove() {
+        console.debug("Removing train")
+        if (this.#trainGroup !== undefined) this.#trainGroup.clear(true, true)
+        //if (this.#triggerGroup !== undefined) this.#triggerGroup.clear(true, true)
+        if (this.#timedEvent !== undefined) this.#timedEvent.remove()
+        if (this.#sndLoop !== undefined) this.#sndLoop.stop();
+        this.#loadedImages.forEach(imgId => this.#scene.textures.remove(imgId));
+        this.#loadedImages = new Set();
+        this.#playingSounds.forEach(snd => snd.stop());
+        this.#playingSounds = new Array();
+        this.#loadedSounds.forEach(sndId => this.#scene.sound.removeByKey(sndId));
+        this.#loadedSounds = new Set();
+
+        this.#scene.sound.removeByKey('wheels1');
+        this.#scene.sound.removeByKey('wheels2');
+        this.#scene.sound.removeByKey('wheels3');
+        this.#scene.sound.removeByKey('trainloop');
+        this.#scene.sound.removeByKey('train_in_out1');
+        this.#scene.sound.removeByKey('train_in_out2');
+        this.#scene.sound.removeByKey('locomotive1');
+        this.#trainActive = false;
+    };
 
 };
 
@@ -496,111 +504,110 @@ remove() {
 ///////////////////////////////////////////////////////////////////////
 
 class MainScene extends Phaser.Scene {
-  constructor(img, seed) {
-      super({
-          key: 'MainScene',
-          active: true,
-          physics:
-          {
-              default: 'arcade',
-              arcade: { debug: false }
-          },
-      });
-      this.imgInventory = img;
+    constructor(img, seed) {
+        super({
+            key: 'MainScene',
+            active: true,
+            physics:
+            {
+                default: 'arcade',
+                arcade: { debug: false }
+            },
+        });
+        this.#imgInventory = img;
 
-      //var seedsRandGen = new RNG(getSeed());
-      let seedsRandGen = new Random.MT(getSeed());
-      this.sceneRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
-      this.trainRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
+        //var seedsRandGen = new RNG(getSeed());
+        let seedsRandGen = new Random.MT(getSeed());
+        this.#sceneRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
+        this.#trainRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
 
-      this.train = new TrainAnimation(this, this.imgInventory)
-      this.train.leftPosition = 0;
-      this.train.rightPosition = screenLayout.width;
-      this.train.railsPosition = 480;
-  }
-  //TODO: convert to private fields
-  //#imgInventory;
-  imgInventory;
-  sceneRandGen;
-  trainRandGen;
+        this.#train = new TrainAnimation(this, this.#imgInventory)
+        this.#train.leftPosition = 0;
+        this.#train.rightPosition = screenLayout.width;
+        this.#train.railsPosition = 480;
+    };
+    #imgInventory;
+    #sceneRandGen;
+    #trainRandGen;
+    #train;
 
+    preload() {
+        this.load.image('placeholder', 'assets/misc/placeholder.png')
+    }
 
-  train;
-}
+    create() {
+        const groundY = screenLayout.groundHeight + screenLayout.railHeight
+        this.add.rectangle(0,
+            0,
+            screenLayout.width,
+            screenLayout.height,
+            0x3498d8).setOrigin(0, 0);
+        this.add.rectangle(0,
+            groundY,
+            screenLayout.width,
+            screenLayout.height - groundY,
+            0xa04000).setOrigin(0, 0);
+        this.add.rectangle(0,
+            screenLayout.groundHeight + 1,
+            screenLayout.width,
+            screenLayout.railHeight,
+            0x333344).setOrigin(0, 0);
 
-MainScene.prototype.preload = function () {
-  this.load.image('placeholder', 'assets/misc/placeholder.png')
-}
+        this.#train.setup(Train.generateTrain(this.#imgInventory, this.#trainRandGen));
+        timerText = this.add.text(32, 32);
+    }
 
-MainScene.prototype.create = function () {
-  const groundY = screenLayout.groundHeight + screenLayout.railHeight
-  this.add.rectangle(0,
-      0,
-      screenLayout.width,
-      screenLayout.height,
-      0x3498d8).setOrigin(0, 0);
-  this.add.rectangle(0,
-      groundY,
-      screenLayout.width,
-      screenLayout.height - groundY,
-      0xa04000).setOrigin(0, 0);
-  this.add.rectangle(0,
-      screenLayout.groundHeight + 1,
-      screenLayout.width,
-      screenLayout.railHeight,
-      0x333344).setOrigin(0, 0);
+    update() {
+        const t = this.#train.timer;
+        if (t !== undefined) {
+            timerText.setText('Train timer progress: ' + t.toString().substr(0, 4));
+        } else {
+            timerText.setText('Train timer progress: undefined');
+        }
 
-  this.train.setup(Train.generateTrain(this.imgInventory, this.trainRandGen));
-  timerText = this.add.text(32, 32);
-}
+        if (!this.#train.active) {
+            this.#train.setup(Train.generateTrain(this.#imgInventory, this.#trainRandGen));
+        }
+    }
 
-MainScene.prototype.update = function () {
-  const t = this.train.timer;
-  if (t !== undefined) {
-      timerText.setText('Train timer progress: ' + t.toString().substr(0, 4));
-  } else {
-      timerText.setText('Train timer progress: undefined');
-  }
-
-  if (!this.train.active) {
-      this.train.setup(Train.generateTrain(this.imgInventory, this.trainRandGen));
-  }
-}
-
+};
 ///////////////////////////////////////////////////////////////////////
 // main program
 ///////////////////////////////////////////////////////////////////////
 
-console.info("Starting up")
+console.info("Starting up");
 
-console.debug("Initialising images")
-var img = initImageInventory()
+console.debug("Initialising images");
+var img = initImageInventory();
+
+console.debug("Initialising sounds");
+var snd = initSndInventory();
 
 function getSeed() {
-  const n = parseInt(window.location.hash.substring(1), 10)
-  if (isNaN(n)) {
-      const nrand = Math.round(Math.random() * 0x7fffffff)
-      window.location.hash = '#' + nrand
-      return nrand
-  }
-  return n
+    const n = parseInt(window.location.hash.substring(1), 10);
+    if (isNaN(n)) {
+        const nrand = Math.round(Math.random() * 0x7fffffff);
+        window.location.hash = '#' + nrand;
+        return nrand;
+    }
+    return n;
 }
 
 console.debug("Generating landscape");
 let landscape = Landscape.generateLandscape();
 
-console.debug("Initialising engine")
+console.debug("Initialising engine");
 var config = {
-  type: Phaser.AUTO,
-  width: screenLayout.width,
-  height: screenLayout.height,
-  scale: {
-      mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH
-  },
-  physics: {
-      default: 'arcade'
-  },
-  scene: new MainScene(img, getSeed()),
+    type: Phaser.AUTO,
+    width: screenLayout.width,
+    height: screenLayout.height,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    physics: {
+        default: 'arcade'
+    },
+    scene: new MainScene(img, getSeed()),
 };
 var gm = new Phaser.Game(config);
