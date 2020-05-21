@@ -6,15 +6,15 @@
 // license. See the LICENSE file for details.
 ///////////////////////////////////////////////////////////////////////////////
 
-function generateTrain(img, rng) {
+function generateTrain(img, snd, rng) {
     const trainType = rng.range(0, 1);
     switch (trainType) {
-        case 0: return generatePassengerTrain(img, rng);
+        case 0: return generatePassengerTrain(img, snd, rng);
         default: return {}
     }
 }
 
-function generatePassengerTrain(img, rng) {
+function generatePassengerTrain(img, snd, rng) {
     const config = {
         minSpeedPx: 650,
         maxSpeedPx: 850,
@@ -23,26 +23,49 @@ function generatePassengerTrain(img, rng) {
         minDelayMs: 7000,
         maxDelayMs: 15000
     };
-    let trainLayout = new Array();
     const trainDelay = rng.range(config.minDelayMs, config.maxDelayMs);
     const trainDirection = rng.range(0, 2);
     const trainSpeed = rng.range(config.minSpeedPx, config.maxSpeedPx);
     const hasRearLocomotive = rng.range(0, 2);
     const passengerWagonNumber = rng.range(config.minPassengerWagons, config.maxPassengerWagons);
-    const frontLocoId = img.randomInCategory("passenger_locomotive", rng, img);
+    const frontLocoId = img.randomInCategory("passenger_locomotive", rng);
     const rearLocoId = img.randomOtherVariant(frontLocoId, rng);
+
+    const introSnd = snd.randomInCategory("train_inout", rng);
+    const outroSnd = snd.randomOtherVariant(introSnd, rng);
+    const loopSnd = snd.randomInCategory("", rng);
+    const frontLocoSnd = snd.randomInCategory("locomotive", rng);
+    const rearLocoSnd = snd.randomOtherVariant(frontLocoSnd, rng);
+    const rearLocoWheelsSnd = snd.randomInCategory("wheels", rng);
+    const wheelsFirstSnd = snd.randomInCategory("wheels_inout", rng);
+    const wheelsLastSnd = snd.randomOtherVariant(wheelsFirstSnd, rng);
+  
+    let trainLayout = new Array();
+    let trainSounds = new Array();
     trainLayout.push(frontLocoId);
+    trainSounds.push(new Array(frontLocoSnd, wheelsFirstSnd));
     let wagonId = img.randomInCategory("passenger_wagon", rng);
     for (let i = 0; i < passengerWagonNumber; i++) {
         trainLayout.push(wagonId);
         wagonId = img.randomOtherVariant(wagonId, rng);
+        trainSounds.push(snd.randomInCategory("wheels", rng));
     }
-    if (hasRearLocomotive) trainLayout.push(rearLocoId);
+    if (hasRearLocomotive) {
+        trainLayout.push(rearLocoId);
+        trainSounds.push(new Array(rearLocoSnd, rearLocoWheelsSnd));
+    }
+    trainSounds.push(new Array(wheelsLastSnd));
     return {
         delay: trainDelay,
         direction: trainDirection,
         speed: trainSpeed, 
-        train: trainLayout
+        train: trainLayout,
+        sounds: {
+            intro: introSnd,
+            outro: outroSnd,
+            loop: loopSnd,
+            train: trainSounds
+        }
     };
 };
 

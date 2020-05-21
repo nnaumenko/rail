@@ -462,14 +462,14 @@ class TrainAnimation {
         });
 
         console.debug('Loading train sounds');
-        this.#scene.load.audio('wheels0', ['assets/train_sounds/wheels2_5d.mp3']);
-        this.#scene.load.audio('wheels1', ['assets/train_sounds/wheels_5a.mp3']);
-        this.#scene.load.audio('wheels2', ['assets/train_sounds/wheels_5b.mp3']);
-        this.#scene.load.audio('wheels3', ['assets/train_sounds/wheels2_5c.mp3']);
-        this.#scene.load.audio('trainloop', ['assets/train_sounds/train_loop1.mp3']);
-        this.#scene.load.audio('train_in_out1', ['assets/train_sounds/train_in_out1.mp3']);
-        this.#scene.load.audio('train_in_out2', ['assets/train_sounds/train_in_out2.mp3']);
-        this.#scene.load.audio('locomotive1', ['assets/train_sounds/locomotive1.mp3']);
+        this.#scene.load.audio('wheels0', [snd_wheels_inout_4]);
+        this.#scene.load.audio('wheels1', [snd_wheels_1]);
+        this.#scene.load.audio('wheels2', [snd_wheels_2]);
+        this.#scene.load.audio('wheels3', [snd_wheels_inout_3]);
+        this.#scene.load.audio('trainloop', [snd_train_loop_1]);
+        this.#scene.load.audio('train_in_out1', [snd_train_inout_1]);
+        this.#scene.load.audio('train_in_out2', [snd_train_inout_2]);
+        this.#scene.load.audio('locomotive1', [snd_locomotive_1]);
         this.#scene.load.start();
     }
 
@@ -504,7 +504,7 @@ class TrainAnimation {
 ///////////////////////////////////////////////////////////////////////
 
 class MainScene extends Phaser.Scene {
-    constructor(img, seed) {
+    constructor(img, snd, seed) {
         super({
             key: 'MainScene',
             active: true,
@@ -515,6 +515,7 @@ class MainScene extends Phaser.Scene {
             },
         });
         this.#imgInventory = img;
+        this.#sndInventory = snd;
 
         //var seedsRandGen = new RNG(getSeed());
         let seedsRandGen = new Random.MT(getSeed());
@@ -527,6 +528,7 @@ class MainScene extends Phaser.Scene {
         this.#train.railsPosition = 480;
     };
     #imgInventory;
+    #sndInventory;
     #sceneRandGen;
     #trainRandGen;
     #train;
@@ -553,7 +555,10 @@ class MainScene extends Phaser.Scene {
             screenLayout.railHeight,
             0x333344).setOrigin(0, 0);
 
-        this.#train.setup(Train.generateTrain(this.#imgInventory, this.#trainRandGen));
+        this.#train.setup(Train.generateTrain(
+            this.#imgInventory,
+            this.#sndInventory,
+            this.#trainRandGen));
         timerText = this.add.text(32, 32);
     }
 
@@ -566,11 +571,14 @@ class MainScene extends Phaser.Scene {
         }
 
         if (!this.#train.active) {
-            this.#train.setup(Train.generateTrain(this.#imgInventory, this.#trainRandGen));
+            this.#train.setup(Train.generateTrain(
+                this.#imgInventory,
+                this.#sndInventory,
+                this.#trainRandGen));
         }
     }
-
 };
+
 ///////////////////////////////////////////////////////////////////////
 // main program
 ///////////////////////////////////////////////////////////////////////
@@ -581,7 +589,7 @@ console.debug("Initialising images");
 var img = initImageInventory();
 
 console.debug("Initialising sounds");
-var snd = initSndInventory();
+var snd = initSoundInventory();
 
 function getSeed() {
     const n = parseInt(window.location.hash.substring(1), 10);
@@ -608,6 +616,6 @@ var config = {
     physics: {
         default: 'arcade'
     },
-    scene: new MainScene(img, getSeed()),
+    scene: new MainScene(img, snd, getSeed()),
 };
 var gm = new Phaser.Game(config);
