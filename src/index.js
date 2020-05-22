@@ -231,7 +231,7 @@ function initImageInventory() {
     return img;
 };
 
-import snd_locomotive_1 from "./assets/train_sounds/train_in_out1.mp3";
+import snd_locomotive_1 from "./assets/train_sounds/locomotive1.mp3";
 import snd_train_inout_1 from "./assets/train_sounds/train_in_out1.mp3";
 import snd_train_inout_2 from "./assets/train_sounds/train_in_out2.mp3";
 import snd_train_loop_1 from "./assets/train_sounds/train_loop1.mp3";
@@ -357,20 +357,24 @@ class TrainAnimation {
 
     #playIntroSound() {
         console.debug('Playing intro sound');
-        this.#sndLoop = this.#scene.sound.add('trainloop', { loop: true });
-        let snd = this.#scene.sound.add('train_in_out1');
+        const sndLoopKey = 'tr_snd_' + String(this.#config.sounds.loop);
+        const sndIntroKey = 'tr_snd_' + String(this.#config.sounds.intro);
+        this.#sndLoop = this.#scene.sound.add(sndLoopKey, { loop: true });
+        let snd = this.#scene.sound.add(sndIntroKey);
         snd.once('complete', function () {
-            this.#createTrainInScene(this.#config);
+            this.#createTrainInScene();
         }, this);
-        snd.play();
-        this.#timedEvent = this.#scene.time.delayedCall(3000, this.#playSound, [this.#sndLoop], this);
+        this.#playSound(snd);
+        this.#timedEvents.push(this.#scene.time.delayedCall(3000, this.#playSound, [this.#sndLoop], this));
     }
 
     #playOutroSound() {
         console.debug('Playing outro sound');
-        let snd = this.#scene.sound.add('train_in_out2');
+        const sndOutroKey = 'tr_snd_' + String(this.#config.sounds.outro);
+        let snd = this.#scene.sound.add(sndOutroKey);
         snd.once('complete', this.remove, this);
-        snd.play();
+//        snd.play();
+        this.#playSound(snd);
     }
 
     #createTrainInScene() {
@@ -387,14 +391,11 @@ class TrainAnimation {
         let trainLen = 0;
         let previousCoupling = 0;
 
-        let sndFirst = this.#scene.sound.add('wheels0');
-        sndFirst.rate = speed / 750;
-        this.#playSound(sndFirst);
-
         this.#config.train.forEach(function (id, i, arr) {
             const sprName = 'tr_img_' + String(id);
             const attr = this.#imageInventory.getAttributes(id);
             const sprWidth = this.#scene.textures.get(sprName).source[0].width;
+            const soundDelay = (trainLen - sizeX / 2) / speed / scale * 1000;
             if (this.#config.direction) {
                 this.#trainGroup.create(posX2 + 1 + trainLen, posY, sprName);
             }
@@ -402,30 +403,25 @@ class TrainAnimation {
             if (!this.#config.direction) {
                 this.#trainGroup.create(posX1 - 1 - trainLen, posY, sprName);
             }
-
             previousCoupling = attr.rightCoupling;
+            this.#config.sounds.train[i].forEach(function(sndId) {
+                let snd = this.#scene.sound.add('tr_snd_' + String(sndId));
+                snd.rate = speed / 750;
+                this.#timedEvents.push(this.#scene.time.delayedCall(soundDelay, this.#playSound, [snd], this));
+            }, this);
+        },this);
 
-            if (i != (arr.length - 1)) {
-                var snd = this.#scene.sound.add('wheels1');
-            } else {
-                var snd = this.#scene.sound.add('wheels3');
-            }
+        const lastSoundDelay = (trainLen - sizeX / 2) / speed / scale * 1000;
+        this.#config.sounds.train[this.#config.train.length].forEach(function(sndId) {
+            let snd = this.#scene.sound.add('tr_snd_' + String(sndId));
             snd.rate = speed / 750;
-            let soundDelay = (trainLen - sizeX / 2) / speed / scale * 1000;
-            this.#timedEvents.push(this.#scene.time.delayedCall(soundDelay, this.#playSound, [snd], this));
-            if (this.#imageInventory.getCategoryById(id) == 'passenger_locomotive' ||
-                this.#imageInventory.getCategoryById(id) == 'freight_locomotive') {
-                let sndLoco = this.#scene.sound.add('locomotive1');
-                let soundLocoDelay = soundDelay - sprWidth * scale;
-                if (soundLocoDelay < 0) soundLocoDelay = 0;
-                this.#timedEvents.push(this.#scene.time.delayedCall(soundLocoDelay, this.#playSound, [sndLoco], this));
-            }
-        }.bind(this));
+            this.#timedEvents.push(this.#scene.time.delayedCall(lastSoundDelay, this.#playSound, [snd], this));
+        }, this);
         this.#timedEvents.push(
-            this.#scene.time.delayedCall((trainLen - sizeX / 2) / speed / scale * 1000, this.#stopSound, [this.#sndLoop], this)
+            this.#scene.time.delayedCall(lastSoundDelay+3000, this.#stopSound, [this.#sndLoop], this)
         );
         this.#timedEvents.push(
-            this.#scene.time.delayedCall((trainLen - sizeX / 2) / speed / scale * 1000, this.#playOutroSound, [], this)
+            this.#scene.time.delayedCall(lastSoundDelay, this.#playOutroSound, [], this)
         );
 
         Phaser.Actions.Call(this.#trainGroup.getChildren(), function (spr) {
@@ -488,15 +484,6 @@ class TrainAnimation {
             this.#scene.load.audio("tr_snd_" + String(id), sndPath);
             this.#loadedSounds.add("tr_snd_" + String(id));
         });
-
-        this.#scene.load.audio('wheels0', [snd_wheels_inout_4]);
-        this.#scene.load.audio('wheels1', [snd_wheels_1]);
-        this.#scene.load.audio('wheels2', [snd_wheels_2]);
-        this.#scene.load.audio('wheels3', [snd_wheels_inout_3]);
-        this.#scene.load.audio('trainloop', [snd_train_loop_1]);
-        this.#scene.load.audio('train_in_out1', [snd_train_inout_1]);
-        this.#scene.load.audio('train_in_out2', [snd_train_inout_2]);
-        this.#scene.load.audio('locomotive1', [snd_locomotive_1]);
         this.#scene.load.start();
     }
 
@@ -514,14 +501,6 @@ class TrainAnimation {
         this.#playingSounds = new Array();
         this.#loadedSounds.forEach(sndId => this.#scene.sound.removeByKey(sndId));
         this.#loadedSounds = new Set();
-
-        this.#scene.sound.removeByKey('wheels1');
-        this.#scene.sound.removeByKey('wheels2');
-        this.#scene.sound.removeByKey('wheels3');
-        this.#scene.sound.removeByKey('trainloop');
-        this.#scene.sound.removeByKey('train_in_out1');
-        this.#scene.sound.removeByKey('train_in_out2');
-        this.#scene.sound.removeByKey('locomotive1');
         this.#trainActive = false;
     };
 

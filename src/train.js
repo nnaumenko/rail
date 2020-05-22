@@ -16,8 +16,8 @@ function generateTrain(img, snd, rng) {
 
 function generatePassengerTrain(img, snd, rng) {
     const config = {
-        minSpeedPx: 650,
-        maxSpeedPx: 850,
+        minSpeedPx: 550,
+        maxSpeedPx: 900,
         maxPassengerWagons: 15,
         minPassengerWagons: 2,
         minDelayMs: 7000,
