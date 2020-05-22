@@ -304,18 +304,20 @@ var timerText
 ///////////////////////////////////////////////////////////////////////
 
 class TrainAnimation {
-    constructor(scene, img) {
+    constructor(scene, img, snd) {
         this.#scene = scene;
         this.#imageInventory = img;
+        this.#soundInventory = snd;
         this.#trainActive = false;
         this.#loadedImages = new Set();
         this.#loadedSounds = new Set();
         this.#playingSounds = new Array();
+        this.#timedEvents = new Array();
     }
     get active() { return this.#trainActive; }
     get timer() {
-        if (this.timedEvent === undefined) return undefined
-        return this.timedEvent.getProgress();
+        if (this.#timedEvent === undefined) return undefined
+        return this.#timedEvent.getProgress();
     }
     set railsPosition(pos) { this.#screenLayout.posRailsY = pos; }
     get railsPosition() { return this.#screenLayout.posRailsY; }
@@ -326,6 +328,8 @@ class TrainAnimation {
 
     #scene;
     #imageInventory;
+    #soundInventory;
+    #config;
     #trainGroup;
     //#triggerGroup;
     #timedEvent;
@@ -340,128 +344,151 @@ class TrainAnimation {
     #loadedImages;
     #playingSounds;
     #loadedSounds;
+    #timedEvents;
 
-    setup(trainConfig) {
-        console.debug("Setting up train")
-        if (this.active) this.remove()
-        this.#trainActive = true;
+    #playSound(snd) {
+        this.#playingSounds.push(snd);
+        snd.play();
+    }
 
-        console.debug("Train configuration", trainConfig);
+    #stopSound(snd) {
+        snd.stop();
+    }
 
+    #playIntroSound() {
+        console.debug('Playing intro sound');
+        this.#sndLoop = this.#scene.sound.add('trainloop', { loop: true });
+        let snd = this.#scene.sound.add('train_in_out1');
+        snd.once('complete', function () {
+            this.#createTrainInScene(this.#config);
+        }, this);
+        snd.play();
+        this.#timedEvent = this.#scene.time.delayedCall(3000, this.#playSound, [this.#sndLoop], this);
+    }
+
+    #playOutroSound() {
+        console.debug('Playing outro sound');
+        let snd = this.#scene.sound.add('train_in_out2');
+        snd.once('complete', this.remove, this);
+        snd.play();
+    }
+
+    #createTrainInScene() {
+        console.debug('Creating train');
         const scale = this.#screenLayout.scale;
         const posY = this.#screenLayout.posRailsY;
         const posX1 = this.#screenLayout.posLeftX;
         const posX2 = this.#screenLayout.posRightX;
         const sizeX = posX2 - posX1;
+        const speed = this.#config.speed;
 
-        let playsound = function (snd) {
-            //this.playingSounds.push(snd);
-            snd.play();
-        }
+        this.#trainGroup = this.#scene.physics.add.group();
 
-        let stopsound = function (snd) {
-            snd.stop();
-        }
+        let trainLen = 0;
+        let previousCoupling = 0;
 
-        let playOutroSound = function () {
-            console.debug('Playing outro sound');
-            let snd = this.#scene.sound.add('train_in_out2');
-            snd.once('complete', this.remove, this);
-            snd.play();
-        }
+        let sndFirst = this.#scene.sound.add('wheels0');
+        sndFirst.rate = speed / 750;
+        this.#playSound(sndFirst);
 
-        let createTrainInScene = function () {
+        this.#config.train.forEach(function (id, i, arr) {
+            const sprName = 'tr_img_' + String(id);
+            const attr = this.#imageInventory.getAttributes(id);
+            const sprWidth = this.#scene.textures.get(sprName).source[0].width;
+            if (this.#config.direction) {
+                this.#trainGroup.create(posX2 + 1 + trainLen, posY, sprName);
+            }
+            trainLen += (sprWidth - attr.leftCoupling - previousCoupling) * scale;
+            if (!this.#config.direction) {
+                this.#trainGroup.create(posX1 - 1 - trainLen, posY, sprName);
+            }
 
-            console.debug('Creating train');
+            previousCoupling = attr.rightCoupling;
 
-            this.#trainGroup = this.#scene.physics.add.group();
+            if (i != (arr.length - 1)) {
+                var snd = this.#scene.sound.add('wheels1');
+            } else {
+                var snd = this.#scene.sound.add('wheels3');
+            }
+            snd.rate = speed / 750;
+            let soundDelay = (trainLen - sizeX / 2) / speed / scale * 1000;
+            this.#timedEvents.push(this.#scene.time.delayedCall(soundDelay, this.#playSound, [snd], this));
+            if (this.#imageInventory.getCategoryById(id) == 'passenger_locomotive' ||
+                this.#imageInventory.getCategoryById(id) == 'freight_locomotive') {
+                let sndLoco = this.#scene.sound.add('locomotive1');
+                let soundLocoDelay = soundDelay - sprWidth * scale;
+                if (soundLocoDelay < 0) soundLocoDelay = 0;
+                this.#timedEvents.push(this.#scene.time.delayedCall(soundLocoDelay, this.#playSound, [sndLoco], this));
+            }
+        }.bind(this));
+        this.#timedEvents.push(
+            this.#scene.time.delayedCall((trainLen - sizeX / 2) / speed / scale * 1000, this.#stopSound, [this.#sndLoop], this)
+        );
+        this.#timedEvents.push(
+            this.#scene.time.delayedCall((trainLen - sizeX / 2) / speed / scale * 1000, this.#playOutroSound, [], this)
+        );
 
-            let trainLen = 0;
-            let previousCoupling = 0;
+        Phaser.Actions.Call(this.#trainGroup.getChildren(), function (spr) {
+            if (!this.#config.direction) {
+                spr.setVelocity(speed, 0);
+                spr.setScale(scale);
+                spr.setOrigin(0, 1);
+            } else {
+                spr.setVelocity(-speed, 0);
+                spr.setScale(-scale, scale);
+                spr.setOrigin(1, 1);
+            }
+        }.bind(this));
 
-            let sndFirst = this.#scene.sound.add('wheels0');
-            sndFirst.rate = trainConfig.speed / 750;
-            playsound(sndFirst);
+        //this.triggerGroup = this.scene.physics.add.staticGroup();
+        //this.triggerGroup.create(posX2 + 1 + trainLen, posY, 'placeholder');
+        //this.triggerGroup.onOverlap = true;
 
-            trainConfig.train.forEach(function (id, i, arr) {
-                const sprName = 'tr_img_' + String(id);
-                const attr = this.#imageInventory.getAttributes(id);
-                const sprWidth = this.#scene.textures.get(sprName).source[0].width;
-                if (trainConfig.direction) {
-                    this.#trainGroup.create(posX2 + 1 + trainLen, posY, sprName);
-                }
-                trainLen += (sprWidth - attr.leftCoupling - previousCoupling) * scale;
-                if (!trainConfig.direction) {
-                    this.#trainGroup.create(posX1 - 1 - trainLen, posY, sprName);
-                }
+        //this.scene.physics.add.overlap(this.triggerGroup, this.trainGroup, playOutroSound, null, this);
+    }
 
-                previousCoupling = attr.rightCoupling;
 
-                if (i != (arr.length - 1)) {
-                    var snd = this.#scene.sound.add('wheels1');
-                } else {
-                    var snd = this.#scene.sound.add('wheels3');
-                }
-                snd.rate = trainConfig.speed / 750;
-                let soundDelay = (trainLen - sizeX / 2) / trainConfig.speed / scale * 1000;
-                this.#scene.time.delayedCall(soundDelay, playsound, [snd], this);
-                if (this.#imageInventory.getCategoryById(id) == 'passenger_locomotive' ||
-                    this.#imageInventory.getCategoryById(id) == 'freight_locomotive') {
-                    let sndLoco = this.#scene.sound.add('locomotive1');
-                    let soundLocoDelay = soundDelay - sprWidth * scale;
-                    if (soundLocoDelay < 0) soundLocoDelay = 0;
-                    this.#scene.time.delayedCall(soundLocoDelay, playsound, [sndLoco], this);
-                }
-            }.bind(this));
-            this.#scene.time.delayedCall((trainLen - sizeX / 2) / trainConfig.speed / scale * 1000, stopsound, [this.sndLoop], this);
-            this.#scene.time.delayedCall((trainLen - sizeX / 2) / trainConfig.speed / scale * 1000, playOutroSound, [], this);
+    setup(trainConfig) {
+        console.debug("Setting up train");
+        if (this.#trainActive) this.remove();
+        this.#trainActive = true;
+        this.#config = trainConfig;
 
-            Phaser.Actions.Call(this.#trainGroup.getChildren(), function (spr) {
-                if (!trainConfig.direction) {
-                    spr.setVelocity(trainConfig.speed, 0);
-                    spr.setScale(scale);
-                    spr.setOrigin(0, 1);
-                } else {
-                    spr.setVelocity(-trainConfig.speed, 0);
-                    spr.setScale(-scale, scale);
-                    spr.setOrigin(1, 1);
-                }
-            })
-
-            //this.triggerGroup = this.scene.physics.add.staticGroup();
-            //this.triggerGroup.create(posX2 + 1 + trainLen, posY, 'placeholder');
-            //this.triggerGroup.onOverlap = true;
-
-            //this.scene.physics.add.overlap(this.triggerGroup, this.trainGroup, playOutroSound, null, this);
-        }
-
-        function playIntroSound() {
-            console.debug('Playing intro sound');
-            this.sndLoop = this.#scene.sound.add('trainloop', { loop: true });
-            let snd = this.#scene.sound.add('train_in_out1');
-            snd.once('complete', createTrainInScene, this);
-            snd.play();
-            this.timedEvent = this.#scene.time.delayedCall(3000, playsound, [this.sndLoop], this);
-        }
+        console.debug("Train configuration", this.#config);
 
         this.#scene.load.once('complete', function () {
             console.debug('Load complete');
             this.#timedEvent = this.#scene.time.delayedCall(
                 trainConfig.delay,
-                playIntroSound,
+                this.#playIntroSound,
                 [],
                 this);
         }, this);
 
-        //Phaser does not care if the same image is loaded multiple times
         console.debug('Loading train images');
-        trainConfig.train.forEach(id => {
+        //Phaser does not care if the same image loaded multiple times
+        this.#config.train.forEach(id => {
             const imgPath = this.#imageInventory.getPathById(id);
             this.#scene.load.image("tr_img_" + String(id), imgPath);
             this.#loadedImages.add("tr_img_" + String(id));
         });
 
         console.debug('Loading train sounds');
+        let soundsToLoad = new Set();
+        soundsToLoad.add(this.#config.sounds.intro);
+        soundsToLoad.add(this.#config.sounds.outro);
+        soundsToLoad.add(this.#config.sounds.loop);
+        this.#config.sounds.train.forEach(snds => {
+            snds.forEach(id => {
+                soundsToLoad.add(id);
+            });
+        });
+        soundsToLoad.forEach(id => {
+            const sndPath = this.#soundInventory.getPathById(id);
+            this.#scene.load.audio("tr_snd_" + String(id), sndPath);
+            this.#loadedSounds.add("tr_snd_" + String(id));
+        });
+
         this.#scene.load.audio('wheels0', [snd_wheels_inout_4]);
         this.#scene.load.audio('wheels1', [snd_wheels_1]);
         this.#scene.load.audio('wheels2', [snd_wheels_2]);
@@ -479,6 +506,8 @@ class TrainAnimation {
         //if (this.#triggerGroup !== undefined) this.#triggerGroup.clear(true, true)
         if (this.#timedEvent !== undefined) this.#timedEvent.remove()
         if (this.#sndLoop !== undefined) this.#sndLoop.stop();
+        this.#timedEvents.forEach(te => te.remove());
+        this.#timedEvents = new Array();
         this.#loadedImages.forEach(imgId => this.#scene.textures.remove(imgId));
         this.#loadedImages = new Set();
         this.#playingSounds.forEach(snd => snd.stop());
@@ -522,7 +551,7 @@ class MainScene extends Phaser.Scene {
         this.#sceneRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
         this.#trainRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
 
-        this.#train = new TrainAnimation(this, this.#imgInventory)
+        this.#train = new TrainAnimation(this, this.#imgInventory, this.#sndInventory);
         this.#train.leftPosition = 0;
         this.#train.rightPosition = screenLayout.width;
         this.#train.railsPosition = 480;

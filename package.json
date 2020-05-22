@@ -1,6 +1,6 @@
 {
   "name": "toy-railway-watching",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Railway watching for children",
   "main": "src/index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-private-methods": "^7.8.3",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "file-loader": "^4.2.0",
