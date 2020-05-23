@@ -6,7 +6,7 @@
 // license. See the LICENSE file for details.
 ///////////////////////////////////////////////////////////////////////////////
 
-function generateTrain(img, snd, rng) {
+function generate(img, snd, rng) {
     const trainType = rng.range(0, 1);
     switch (trainType) {
         case 0: return generatePassengerTrain(img, snd, rng);
@@ -68,5 +68,5 @@ function generatePassengerTrain(img, snd, rng) {
 };
 
 module.exports = {
-    generateTrain
+    generate
 };

@@ -293,14 +293,14 @@ function initSoundInventory() {
 var timerText
 
 ///////////////////////////////////////////////////////////////////////
-// class Train
+// class TrainAnimation
 // A train running once across screen on fire-and-forget principle
 // Train is run horizontally at specified vertical position, with 
 // specified speed, scale, and Z-depth, after specified delay.
-// Automatically loads assets and sets up sprites.
-// When it is detected that the train is out of the screen, the  
-// sprites/groups are automatically deleted and assetes are removed 
-// from memory
+// Automatically loads assets, sets up sprites and sounds.
+// When it is detected that the train is out of the screen and/or 
+// the sounds are played until the end, the sprites/groups are 
+// automatically deleted and assetes are removed from memory
 ///////////////////////////////////////////////////////////////////////
 
 class TrainAnimation {
@@ -325,6 +325,16 @@ class TrainAnimation {
     get leftPosition() { return this.#screenLayout.posLeftX; }
     set rightPosition(pos) { this.#screenLayout.posRightX = pos; }
     get rightPosition() { return this.#screenLayout.posRightX; }
+    set zOrder(z) { this.#screenLayout.z = zOrder; }
+    get zOrder() { return this.#screenLayout.zOrder; }
+
+    get constants() {
+        return {
+            loopSndDelayInMs: 3000,
+            loopSndDelayOutMs: 3000,
+            referenceSndSpeedRate: 750
+        };
+    }
 
     #scene;
     #imageInventory;
@@ -339,6 +349,7 @@ class TrainAnimation {
         posLeftX: 0,
         posRightX: 1024,
         scale: 1,
+        zOrder: 8
     };
     #sndLoop;
     #loadedImages;
@@ -365,7 +376,12 @@ class TrainAnimation {
             this.#createTrainInScene();
         }, this);
         this.#playSound(snd);
-        this.#timedEvents.push(this.#scene.time.delayedCall(3000, this.#playSound, [this.#sndLoop], this));
+        const loopDelay = this.constants.loopSndDelayInMs;
+        this.#timedEvents.push(this.#scene.time.delayedCall(
+            loopDelay,
+            this.#playSound,
+            [this.#sndLoop],
+            this));
     }
 
     #playOutroSound() {
@@ -373,7 +389,7 @@ class TrainAnimation {
         const sndOutroKey = 'tr_snd_' + String(this.#config.sounds.outro);
         let snd = this.#scene.sound.add(sndOutroKey);
         snd.once('complete', this.remove, this);
-//        snd.play();
+        //        snd.play();
         this.#playSound(snd);
     }
 
@@ -385,6 +401,7 @@ class TrainAnimation {
         const posX2 = this.#screenLayout.posRightX;
         const sizeX = posX2 - posX1;
         const speed = this.#config.speed;
+        const msPerSecond = 1000;
 
         this.#trainGroup = this.#scene.physics.add.group();
 
@@ -395,7 +412,8 @@ class TrainAnimation {
             const sprName = 'tr_img_' + String(id);
             const attr = this.#imageInventory.getAttributes(id);
             const sprWidth = this.#scene.textures.get(sprName).source[0].width;
-            const soundDelay = (trainLen - sizeX / 2) / speed / scale * 1000;
+            const msPerSecond = 1000;
+            const soundDelay = (trainLen - sizeX / 2) / speed / scale * msPerSecond;
             if (this.#config.direction) {
                 this.#trainGroup.create(posX2 + 1 + trainLen, posY, sprName);
             }
@@ -404,21 +422,22 @@ class TrainAnimation {
                 this.#trainGroup.create(posX1 - 1 - trainLen, posY, sprName);
             }
             previousCoupling = attr.rightCoupling;
-            this.#config.sounds.train[i].forEach(function(sndId) {
+            this.#config.sounds.train[i].forEach(function (sndId) {
                 let snd = this.#scene.sound.add('tr_snd_' + String(sndId));
-                snd.rate = speed / 750;
+                snd.rate = speed / this.constants.referenceSndSpeedRate;
                 this.#timedEvents.push(this.#scene.time.delayedCall(soundDelay, this.#playSound, [snd], this));
             }, this);
-        },this);
+        }, this);
 
-        const lastSoundDelay = (trainLen - sizeX / 2) / speed / scale * 1000;
-        this.#config.sounds.train[this.#config.train.length].forEach(function(sndId) {
+        const lastSoundDelay = (trainLen - sizeX / 2) / speed / scale * msPerSecond;
+        const loopSoundStopDelay = lastSoundDelay + this.constants.loopSndDelayOutMs;
+        this.#config.sounds.train[this.#config.train.length].forEach(function (sndId) {
             let snd = this.#scene.sound.add('tr_snd_' + String(sndId));
-            snd.rate = speed / 750;
+            snd.rate = speed / this.constants.referenceSndSpeedRate;
             this.#timedEvents.push(this.#scene.time.delayedCall(lastSoundDelay, this.#playSound, [snd], this));
         }, this);
         this.#timedEvents.push(
-            this.#scene.time.delayedCall(lastSoundDelay+3000, this.#stopSound, [this.#sndLoop], this)
+            this.#scene.time.delayedCall(loopSoundStopDelay, this.#stopSound, [this.#sndLoop], this)
         );
         this.#timedEvents.push(
             this.#scene.time.delayedCall(lastSoundDelay, this.#playOutroSound, [], this)
@@ -434,6 +453,7 @@ class TrainAnimation {
                 spr.setScale(-scale, scale);
                 spr.setOrigin(1, 1);
             }
+            spr.setDepth(this.#screenLayout.zOrder);
         }.bind(this));
 
         //this.triggerGroup = this.scene.physics.add.staticGroup();
@@ -507,6 +527,87 @@ class TrainAnimation {
 };
 
 ///////////////////////////////////////////////////////////////////////
+// class LandscapeAnimation
+// Creates and sets up background and foreground of landscape.
+// Once created, landscape is operated continuously, assets are 
+// kept in memory.
+// Currently there is no functionality to remove the landscape.
+///////////////////////////////////////////////////////////////////////
+
+class LandscapeAnimation {
+    constructor(scene, img, snd, layout, config) {
+        this.#scene = scene;
+        this.#imageInventory = img;
+        this.#soundInventory = snd;
+        this.#screenLayout = layout;
+    }
+
+    get isLoading() { return this.#assetsLoading; }
+
+    loadAssets() {
+        this.#assetsLoading = true;
+        console.debug("Loading landscape images");
+
+        console.debug("Loading landscape sounds");
+
+        this.#scene.load.once('complete', function() {
+            console.debug("Landscape assets loaded");
+            this.#assetsLoading = false;
+        }, this);
+        this.#scene.load.start();
+    }
+
+    setup(cfg) {
+        console.debug("Setting up landscape");
+        this.#config = cfg;
+
+        console.debug("Landscape configuration", this.#config);
+
+        if (this.isLoading) {
+            console.debug("Waiting for assets to load");
+            while (this.isLoading) {}
+            console.debug("Finish waiting for assets to load");
+        }
+
+        this.#createForegroundInScene();
+        this.#createBackgroundInScene();
+        console.debug("Landscape setup complete");
+    }
+
+    #createForegroundInScene() {
+        console.debug("Creating landscape foreground");
+
+        const groundY = screenLayout.groundHeight + screenLayout.railHeight
+        this.#scene.add.rectangle(0,
+            0,
+            this.#screenLayout.width,
+            this.#screenLayout.height,
+            0x3498d8).setOrigin(0, 0);
+        this.#scene.add.rectangle(0,
+            groundY,
+            this.#screenLayout.width,
+            this.#screenLayout.height - groundY,
+            0xa04000).setOrigin(0, 0);
+        this.#scene.add.rectangle(0,
+            this.#screenLayout.groundHeight + 1,
+            this.#screenLayout.width,
+            this.#screenLayout.railHeight,
+            0x333344).setOrigin(0, 0);
+    }
+
+    #createBackgroundInScene() {
+        console.debug("Creating landscape background");
+    }
+
+    #scene;
+    #imageInventory;
+    #soundInventory;
+    #screenLayout;
+    #config;
+    #assetsLoading;
+};
+
+///////////////////////////////////////////////////////////////////////
 // class MainScene
 // Glues together individual visual and auto elements
 ///////////////////////////////////////////////////////////////////////
@@ -527,43 +628,45 @@ class MainScene extends Phaser.Scene {
 
         //var seedsRandGen = new RNG(getSeed());
         let seedsRandGen = new Random.MT(getSeed());
-        this.#sceneRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
+        this.#landscapeRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
         this.#trainRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
 
-        this.#train = new TrainAnimation(this, this.#imgInventory, this.#sndInventory);
+        this.#train = new TrainAnimation(
+            this,
+            this.#imgInventory,
+            this.#sndInventory);
         this.#train.leftPosition = 0;
         this.#train.rightPosition = screenLayout.width;
         this.#train.railsPosition = 480;
+
+        this.#landscape = new LandscapeAnimation(
+            this,
+            this.#imgInventory,
+            this.#sndInventory,
+            screenLayout
+        );
     };
     #imgInventory;
     #sndInventory;
-    #sceneRandGen;
+    #landscapeRandGen;
     #trainRandGen;
     #train;
+    #landscape;
 
     preload() {
         this.load.image('placeholder', 'assets/misc/placeholder.png')
     }
 
     create() {
-        const groundY = screenLayout.groundHeight + screenLayout.railHeight
-        this.add.rectangle(0,
-            0,
-            screenLayout.width,
-            screenLayout.height,
-            0x3498d8).setOrigin(0, 0);
-        this.add.rectangle(0,
-            groundY,
-            screenLayout.width,
-            screenLayout.height - groundY,
-            0xa04000).setOrigin(0, 0);
-        this.add.rectangle(0,
-            screenLayout.groundHeight + 1,
-            screenLayout.width,
-            screenLayout.railHeight,
-            0x333344).setOrigin(0, 0);
+        const landscapeConfig = Landscape.generate(
+            this.#imgInventory,
+            this.#sndInventory,
+            this.#landscapeRandGen
+        );
 
-        this.#train.setup(Train.generateTrain(
+        this.#landscape.setup(landscapeConfig);
+
+        this.#train.setup(Train.generate(
             this.#imgInventory,
             this.#sndInventory,
             this.#trainRandGen));
@@ -579,7 +682,7 @@ class MainScene extends Phaser.Scene {
         }
 
         if (!this.#train.active) {
-            this.#train.setup(Train.generateTrain(
+            this.#train.setup(Train.generate(
                 this.#imgInventory,
                 this.#sndInventory,
                 this.#trainRandGen));
@@ -593,10 +696,10 @@ class MainScene extends Phaser.Scene {
 
 console.info("Starting up");
 
-console.debug("Initialising images");
+console.debug("Initialising image inventory");
 var img = initImageInventory();
 
-console.debug("Initialising sounds");
+console.debug("Initialising sound inventory");
 var snd = initSoundInventory();
 
 function getSeed() {
@@ -608,9 +711,6 @@ function getSeed() {
     }
     return n;
 }
-
-console.debug("Generating landscape");
-let landscape = Landscape.generateLandscape();
 
 console.debug("Initialising engine");
 var config = {

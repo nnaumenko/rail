@@ -6,10 +6,10 @@
 // license. See the LICENSE file for details.
 ///////////////////////////////////////////////////////////////////////////////
 
-function generateLandscape(img, rng) {
+function generate(img, rng) {
     return {}
 }
 
 module.exports = {
-    generateLandscape
+    generate
 };
