@@ -37,6 +37,7 @@ import freight_locomotives_1_2_green from "./assets/freight_locomotives/loco_fre
 import freight_locomotives_1_2_red from "./assets/freight_locomotives/loco_freight_1_2_red.png";
 import freight_locomotives_1_2_yellow from "./assets/freight_locomotives/loco_freight_1_2_yellow.png";
 import freight_locomotives_2_blue from "./assets/freight_locomotives/loco_freight_2_blue.png";
+import freight_locomotives_2_gray from "./assets/freight_locomotives/loco_freight_2_gray.png";
 import freight_locomotives_2_green from "./assets/freight_locomotives/loco_freight_2_green.png";
 import freight_locomotives_2_tan from "./assets/freight_locomotives/loco_freight_2_tan.png";
 
@@ -82,6 +83,13 @@ import refrigerator_wagon_white from "./assets/freight_wagons/refrigerator-white
 
 import skeleton_wagon from "./assets/freight_wagons/skeleton-empty.png";
 
+import tank_wagon_black from "./assets/tank_wagons/tank-black.png";
+import tank_wagon_darkgray from "./assets/tank_wagons/tank-darkgray.png";
+import tank_wagon_gray from "./assets/tank_wagons/tank-gray.png";
+import tank_wagon_white from "./assets/tank_wagons/tank-white.png";
+import tank_wagon_yellow from "./assets/tank_wagons/tank-yellow.png";
+
+
 function initImageInventory() {
     var img = new Assets.Inventory();
 
@@ -101,30 +109,33 @@ function initImageInventory() {
         passenger_locomotives_3_tan,
     ], { leftCoupling: 12, rightCoupling: 12 });
 
-    img.addType("freight_locomotives", [
+    img.addType("freight_locomotive", [
         freight_locomotives_1_2_blue
-    ]);
-    img.addType("freight_locomotives", [
+    ],  { leftCoupling: 9, rightCoupling: 9 });
+    img.addType("freight_locomotive", [
         freight_locomotives_1_2_gray
-    ]);
-    img.addType("freight_locomotives", [
+    ],  { leftCoupling: 9, rightCoupling: 9 });
+    img.addType("freight_locomotive", [
         freight_locomotives_1_2_green
-    ]);
-    img.addType("freight_locomotives", [
+    ],  { leftCoupling: 9, rightCoupling: 9 });
+    img.addType("freight_locomotive", [
         freight_locomotives_1_2_red
-    ]);
-    img.addType("freight_locomotives", [
+    ],  { leftCoupling: 9, rightCoupling: 9 });
+    img.addType("freight_locomotive", [
         freight_locomotives_1_2_yellow
-    ]);
-    img.addType("freight_locomotives", [
+    ],  { leftCoupling: 9, rightCoupling: 9 });
+    img.addType("freight_locomotive", [
         freight_locomotives_2_blue
-    ]);
-    img.addType("freight_locomotives", [
+    ],  { leftCoupling: 14, rightCoupling: 8 });
+    img.addType("freight_locomotive", [
+        freight_locomotives_2_gray
+    ],  { leftCoupling: 14, rightCoupling: 8 });
+    img.addType("freight_locomotive", [
         freight_locomotives_2_green
-    ]);
-    img.addType("freight_locomotives", [
+    ],  { leftCoupling: 14, rightCoupling: 8 });
+    img.addType("freight_locomotive", [
         freight_locomotives_2_tan
-    ]);
+    ],  { leftCoupling: 14, rightCoupling: 8 });
 
     img.addType("passenger_wagon", [
         passenger_wagons_1a,
@@ -226,6 +237,22 @@ function initImageInventory() {
 
     img.addType("skeleton_wagon", [
         skeleton_wagon
+    ], { leftCoupling: 8, rightCoupling: 5 });
+
+    img.addType("tank_wagon", [
+        tank_wagon_black
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("tank_wagon", [
+        tank_wagon_darkgray
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("tank_wagon", [
+        tank_wagon_gray
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("tank_wagon", [
+        tank_wagon_white
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("tank_wagon", [
+        tank_wagon_yellow
     ], { leftCoupling: 8, rightCoupling: 5 });
 
     return img;
