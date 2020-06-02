@@ -109,19 +109,19 @@ function initImageInventory() {
         passenger_locomotives_3_tan,
     ], { leftCoupling: 12, rightCoupling: 12 });
 
-    img.addType("freight_locomotive", [
+    img.addType("freight_locomotive_section_a", [
         freight_locomotives_1_2_blue
     ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive", [
+    img.addType("freight_locomotive_section_a", [
         freight_locomotives_1_2_gray
     ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive", [
+    img.addType("freight_locomotive_section_a", [
         freight_locomotives_1_2_green
     ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive", [
+    img.addType("freight_locomotive_section_a", [
         freight_locomotives_1_2_red
     ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive", [
+    img.addType("freight_locomotive_section_a", [
         freight_locomotives_1_2_yellow
     ],  { leftCoupling: 9, rightCoupling: 9 });
     img.addType("freight_locomotive", [

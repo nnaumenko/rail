@@ -11,7 +11,8 @@ function generate(img, snd, rng) {
     if (trainType < 5) return generateSingleLocomotive(img, snd, rng);
     if (trainType < 25) return generatePassengerTrain(img, snd, rng);
     if (trainType < 35) return generateSmallContainerTrain(img, snd, rng);
-    return generateSmallFreightTrain(img, snd, rng);
+    if (trainType < 60) return generateSmallFreightTrain(img, snd, rng);
+    return generateLargeContainerTrain(img, snd, rng);
 }
 
 function generatePassengerTrain(img, snd, rng) {
@@ -248,8 +249,72 @@ function generateSingleLocomotive(img, snd, rng) {
             train: trainSounds
         }
     };
-
 }
+
+function generateLargeContainerTrain(img, snd, rng) {
+    const config = {
+        minSpeedPx: 650,
+        maxSpeedPx: 1000,
+        maxContainerWagons: 120,
+        minContainerWagons: 30,
+        maxSimilarWagons: 15,
+        wagonsPerLocomotive: 50,
+        minDelayMs: 7000,
+        maxDelayMs: 15000
+    };
+  
+    const trainDelay = rng.range(config.minDelayMs, config.maxDelayMs);
+    const trainDirection = rng.range(0, 2);
+    const trainSpeed = rng.range(config.minSpeedPx, config.maxSpeedPx);
+    const wagonNumber = rng.range(config.minContainerWagons, config.maxContainerWagons);
+    const locoNumber = Math.ceil(wagonNumber / config.wagonsPerLocomotive);
+    const locoId = img.randomInCategory("freight_locomotive", rng);
+
+    const introSnd = snd.randomInCategory("train_inout", rng);
+    const outroSnd = snd.randomOtherVariant(introSnd, rng);
+    const loopSnd = snd.randomInCategory("train_loop", rng);
+    const locoSnd = snd.randomInCategory("locomotive", rng);
+    const wheelsFirstSnd = snd.randomInCategory("wheels_inout", rng);
+    const wheelsLastSnd = snd.randomOtherVariant(wheelsFirstSnd, rng);
+
+    var containerWagon = img.randomInCategory("container_wagon", rng);
+    var similarWagons = rng.range(1, config.maxSimilarWagons);
+    
+    let trainLayout = new Array();
+    let trainSounds = new Array();
+    trainLayout.push(locoId);
+    trainSounds.push([locoSnd, wheelsFirstSnd]);
+    for (let i = 0; i < (locoNumber-1); i++) {
+        trainLayout.push(img.randomOtherVariant(locoId, rng));
+        trainSounds.push([
+            snd.randomOtherVariant(locoSnd, rng),
+            snd.randomInCategory("wheels", rng)
+        ]);
+    }
+    for (let i = 0; i < wagonNumber; i++) {
+        trainLayout.push(img.randomOtherVariant(containerWagon, rng));
+        trainSounds.push([snd.randomInCategory("wheels", rng)]);
+        similarWagons--;
+        if (similarWagons < 1) {
+            containerWagon = img.randomInCategory("container_wagon", rng);
+            similarWagons = rng.range(1, config.maxSimilarWagons);
+        }
+    }
+    trainSounds.push([wheelsLastSnd]);
+    return {
+        type: "large_container_train",
+        delay: trainDelay,
+        direction: trainDirection,
+        speed: trainSpeed, 
+        train: trainLayout,
+        sounds: {
+            intro: introSnd,
+            outro: outroSnd,
+            loop: loopSnd,
+            train: trainSounds
+        }
+    };
+};
 
 
 module.exports = {
