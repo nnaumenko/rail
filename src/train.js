@@ -16,6 +16,148 @@ function generate(img, snd, rng) {
     return generateLargeMixedTrain(img, snd, rng);
 }
 
+function randomCategory(categories, rng) {
+    const cat = rng.range(0, categories.length);
+    return categories[cat];
+}
+
+function generateWagons(config, img, snd, rng) {
+    let trainImg = new Array();
+    let trainSnd = new Array();
+    let wagon = img.randomInCategory(randomCategory(config.imageWagonCategories, rng), rng);
+    let similarWagons = rng.range(config.minSimilarWagons, config.maxSimilarWagons);
+    for (let i = 0; i < config.wagonNumber; i++) {
+        trainImg.push(img.randomOtherVariant(wagon, rng));
+        let wheelSound = snd.randomInCategory(config.soundCategoryWheelsMiddle, rng);
+        if (config.trainBegin && !i) {
+            wheelSound = snd.randomInCategory(config.soundCategoryWheelsBegin, rng);
+        }
+        trainSnd.push([wheelSound]);
+        similarWagons--;
+        if (similarWagons < 1) {
+            wagon = wagon = img.randomInCategory(randomCategory(config.imageWagonCategories, rng), rng);
+            similarWagons = rng.range(config.minSimilarWagons, config.maxSimilarWagons);
+        }
+    }
+    if (config.trainEnd) {
+        trainSnd.push([snd.randomInCategory(config.soundCategoryWheelsEnd, rng)]);
+    }
+    return {"trainImg": trainImg, "trainSnd": trainSnd};
+}
+
+function generateLocomotives(config, img, snd, rng) {
+    let trainImg = new Array();
+    let trainSnd = new Array();
+    let loco = config.imageLocoId;
+    if (loco === undefined) {
+        loco = img.randomInCategory(randomCategory(config.imageLocoCategories, rng), rng);
+    }
+    const locoSnd = snd.randomInCategory(randomCategory(config.soundLocoCategories, rng), rng);
+    for (let i = 0; i < config.locoNumber; i++) {
+        trainImg.push(img.randomOtherVariant(loco, rng));
+        let wheelSound = snd.randomInCategory(config.soundCategoryWheelsMiddle, rng);
+        if (config.trainBegin && !i) {
+            wheelSound = snd.randomInCategory(config.soundCategoryWheelsBegin, rng);
+        }
+        trainSnd.push([snd.randomOtherVariant(locoSnd, rng), wheelSound]);
+    }
+    if (config.trainEnd) {
+        trainSnd.push([snd.randomInCategory(config.soundCategoryWheelsEnd, rng)]);
+    }
+    return {"trainImg": trainImg, "trainSnd": trainSnd};
+}
+
+function generateTrainTemplate(config, img, snd, rng) {
+    const trainDelay = rng.range(config.minDelayMs, config.maxDelayMs);
+    const trainDirection = rng.range(0, 2);
+    const trainSpeed = rng.range(config.minSpeedPx, config.maxSpeedPx);
+    const introSnd = snd.randomInCategory(randomCategory(config.soundIntroCategories, rng), rng);
+    const loopSnd = snd.randomInCategory(randomCategory(config.soundLoopCategories, rng), rng);
+    const outroSnd = snd.randomInCategory(randomCategory(config.soundOutroCategories, rng), rng);
+    return {
+        type: config.trainType,
+        delay: trainDelay,
+        direction: trainDirection,
+        speed: trainSpeed, 
+        train: new Array(),
+        sounds: {
+            intro: introSnd,
+            loop: loopSnd,
+            outro: outroSnd,
+            train: new Array()
+        }
+    };
+}
+
+function generatePassengerTrain(img, snd, rng) {
+    // Generate number of wagons and whether train has rear locomotive
+    const minWagons = 2;
+    const maxWagons = 15;
+    const numberOfWagons = rng.range(minWagons, maxWagons);
+    const hasRearLocomotive = rng.range(0, 2);
+    // Generate general train info
+    const trainConfig = {
+        trainType: "passenger_train",
+        minDelayMs: 7000,
+        maxDelayMs: 15000,
+        minSpeedPx: 550,
+        maxSpeedPx: 900,
+        soundIntroCategories: ["train_inout"],
+        soundOutroCategories: ["train_inout"],
+        soundLoopCategories: ["train_loop"]
+    };
+    let train = generateTrainTemplate(trainConfig, img, snd, rng);
+    // Generate front locomotive
+    const frontLocoConfig = {
+        imageLocoCategories: ["passenger_locomotive"],
+        soundLocoCategories: ["locomotive"],
+        soundCategoryWheelsBegin: "wheels_inout",
+        soundCategoryWheelsMiddle: "wheels",
+        soundCategoryWheelsEnd: "wheels_inout",
+        locoNumber: 1,
+        trainBegin: true,
+        trainEnd: false
+    };
+    const frontLoco = generateLocomotives(frontLocoConfig, img, snd, rng);
+    const frontLocoId = frontLoco.trainImg[0];
+    train.train = train.train.concat(frontLoco.trainImg);
+    train.sounds.train = train.sounds.train.concat(frontLoco.trainSnd);
+    // Generate wagons
+    const wagonConfig = {
+        imageWagonCategories: ["passenger_wagon"],
+        soundCategoryWheelsBegin: "wheels_inout",
+        soundCategoryWheelsMiddle: "wheels",
+        soundCategoryWheelsEnd: "wheels_inout",
+        wagonNumber: numberOfWagons,
+        minSimilarWagons: (wagons + 1),
+        maxSimilarWagons: (wagons + 2),
+        trainBegin: false,
+        trainEnd: (!hasRearLocomotive)
+    };
+    const wagons = generateWagons(wagonConfig, img, snd, rng);
+    train.train = train.train.concat(wagons.trainImg);
+    train.sounds.train = train.sounds.train.concat(wagons.trainSnd);
+    // Generate rear locomotive (if present)
+    const rearLocoConfig = {
+        imageLocoCategories: ["passenger_locomotive"],
+        soundLocoCategories: ["locomotive"],
+        soundCategoryWheelsBegin: "wheels_inout",
+        soundCategoryWheelsMiddle: "wheels",
+        soundCategoryWheelsEnd: "wheels_inout",
+        locoId: frontLocoId,
+        locoNumber: 1,
+        trainBegin: false,
+        trainEnd: true
+    };
+    if (hasRearLocomotive) {
+        const rearLoco = generateLocomotives(rearLocoConfig, img, snd, rng);
+        train.train = train.train.concat(rearLoco.trainImg);
+        train.sounds.train = train.sounds.train.concat(rearLoco.trainSnd);
+    }
+    return train;
+}
+
+/*
 function generatePassengerTrain(img, snd, rng) {
     const config = {
         minSpeedPx: 550,
@@ -69,7 +211,7 @@ function generatePassengerTrain(img, snd, rng) {
         }
     };
 };
-
+*/
 function generateSmallContainerTrain(img, snd, rng) {
     const config = {
         minSpeedPx: 550,
@@ -123,11 +265,6 @@ function generateSmallContainerTrain(img, snd, rng) {
         }
     };
 };
-
-function randomCategory(categories, rng) {
-    const cat = rng.range(0, categories.length);
-    return categories[cat];
-}
 
 function generateSmallFreightTrain(img, snd, rng) {
     const config = {
