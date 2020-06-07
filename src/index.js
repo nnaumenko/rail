@@ -317,7 +317,7 @@ function initSoundInventory() {
 };
 
 
-var timerText
+//var timerText
 
 ///////////////////////////////////////////////////////////////////////
 // class TrainAnimation
@@ -697,16 +697,16 @@ class MainScene extends Phaser.Scene {
             this.#imgInventory,
             this.#sndInventory,
             this.#trainRandGen));
-        timerText = this.add.text(32, 32);
+        //timerText = this.add.text(32, 32);
     }
 
     update() {
         const t = this.#train.timer;
-        if (t !== undefined) {
-            timerText.setText('Train timer progress: ' + t.toString().substr(0, 4));
-        } else {
-            timerText.setText('Train timer progress: undefined');
-        }
+        //if (t !== undefined) {
+        //    timerText.setText('Train timer progress: ' + t.toString().substr(0, 4));
+        //} else {
+        //    timerText.setText('Train timer progress: undefined');
+        //}
 
         if (!this.#train.active) {
             this.#train.setup(Train.generate(
