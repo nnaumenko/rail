@@ -1,6 +1,6 @@
 {
   "name": "toy-railway-watching",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Railway watching animation for children",
   "main": "src/index.js",
   "scripts": {
