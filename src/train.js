@@ -50,6 +50,8 @@ function generateLocomotives(config, img, snd, rng) {
     if (loco === undefined) {
         loco = img.randomInCategory(randomCategory(config.imageLocoCategories, rng), rng);
     }
+    const firstLocoId = loco;
+    const onlyForwardLocos = rng.range(0, 2);
     const locoSnd = snd.randomInCategory(randomCategory(config.soundLocoCategories, rng), rng);
     for (let i = 0; i < config.locoNumber; i++) {
         trainImg.push(img.randomOtherVariant(loco, rng));
@@ -58,6 +60,29 @@ function generateLocomotives(config, img, snd, rng) {
             wheelSound = snd.randomInCategory(config.soundCategoryWheelsBegin, rng);
         }
         trainSnd.push([snd.randomOtherVariant(locoSnd, rng), wheelSound]);
+
+        const attr = img.getAttributes(loco);
+        const locosToGenerate = config.locoNumber - i - 1;
+        if (locosToGenerate >= 2 && (attr.sectionB !== undefined)) {
+            // Next locomotive will be section B of the current locomotive
+            loco = attr.sectionB[0];
+            continue;
+        }
+        if ((attr.reverse !== undefined && !onlyForwardLocos) || attr.isSectionA) {
+            // Next locomotive will be reversed version of the current locomotive
+            loco = attr.reverse[0];
+            continue;
+        }
+        if (attr.isSectionB) {
+            // This locomotive was a section B, the next one must be reverse section
+            loco = attr.reverse[0];
+            continue;
+        }
+        if (attr.isReverse) {
+            // This locomotive was a reverse section, the next one must be forward section 
+            loco = firstLocoId;
+            continue;
+        }
     }
     if (config.trainEnd) {
         trainSnd.push([snd.randomInCategory(config.soundCategoryWheelsEnd, rng)]);
@@ -169,13 +194,18 @@ function generateSingleLocomotive(img, snd, rng) {
     };
     let train = generateTrainTemplate(trainConfig, img, snd, rng);
     // Generate locomotive
+    const locoNumber = rng.range(1, 4);
     const locoConfig = {
-        imageLocoCategories: ["passenger_locomotive", "freight_locomotive"],
+        imageLocoCategories: [
+            "passenger_locomotive",
+            "freight_locomotive",
+            "freight_locomotive_section_a"
+        ],
         soundLocoCategories: ["locomotive"],
         soundCategoryWheelsBegin: "wheels_inout",
         soundCategoryWheelsMiddle: "wheels",
         soundCategoryWheelsEnd: "wheels_inout",
-        locoNumber: 1,
+        locoNumber: locoNumber,
         trainBegin: true,
         trainEnd: true
     };
@@ -192,7 +222,7 @@ function generateContainerTrain(img, snd, rng) {
         maxWagons: 120,
         maxSimilarWagons: 15,
         trainType: "large_container_train",
-        locoCategories: ["freight_locomotive"],
+        locoCategories: ["freight_locomotive", "freight_locomotive_reverse_section_a"],
         wagonsPerLocomotive: 50,
         minSpeed: 650,
         maxSpeed: 1000
@@ -266,7 +296,7 @@ function generateFreightTrain(img, snd, rng) {
         minWagons: 30,
         maxWagons: 120,
         maxSimilarWagons: 15,
-        locoCategories: ["freight_locomotive"],
+        locoCategories: ["freight_locomotive", "freight_locomotive_section_a"],
         wagonsPerLocomotive: 50,
         minSpeed: 650,
         maxSpeed: 1000

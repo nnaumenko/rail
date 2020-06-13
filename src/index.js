@@ -31,15 +31,30 @@ import passenger_locomotives_3_green from "./assets/passenger_locomotives/loco_3
 import passenger_locomotives_3_red from "./assets/passenger_locomotives/loco_3_red.png";
 import passenger_locomotives_3_tan from "./assets/passenger_locomotives/loco_3_tan.png";
 
-import freight_locomotives_1_2_blue from "./assets/freight_locomotives/loco_freight_1_2_blue.png";
-import freight_locomotives_1_2_gray from "./assets/freight_locomotives/loco_freight_1_2_gray.png";
-import freight_locomotives_1_2_green from "./assets/freight_locomotives/loco_freight_1_2_green.png";
-import freight_locomotives_1_2_red from "./assets/freight_locomotives/loco_freight_1_2_red.png";
-import freight_locomotives_1_2_yellow from "./assets/freight_locomotives/loco_freight_1_2_yellow.png";
+import freight_locomotives_1_A_blue from "./assets/freight_locomotives/loco_freight_1_A_blue.png";
+import freight_locomotives_1_A_gray from "./assets/freight_locomotives/loco_freight_1_A_gray.png";
+import freight_locomotives_1_A_green from "./assets/freight_locomotives/loco_freight_1_A_green.png";
+import freight_locomotives_1_A_red from "./assets/freight_locomotives/loco_freight_1_A_red.png";
+import freight_locomotives_1_A_yellow from "./assets/freight_locomotives/loco_freight_1_A_yellow.png";
+import freight_locomotives_1_B_blue from "./assets/freight_locomotives/loco_freight_1_B_blue.png";
+import freight_locomotives_1_B_gray from "./assets/freight_locomotives/loco_freight_1_B_gray.png";
+import freight_locomotives_1_B_green from "./assets/freight_locomotives/loco_freight_1_B_green.png";
+import freight_locomotives_1_B_red from "./assets/freight_locomotives/loco_freight_1_B_red.png";
+import freight_locomotives_1_B_yellow from "./assets/freight_locomotives/loco_freight_1_B_yellow.png";
+import freight_locomotives_1_A_reverse_blue from "./assets/freight_locomotives/loco_freight_1_A_reverse_blue.png";
+import freight_locomotives_1_A_reverse_gray from "./assets/freight_locomotives/loco_freight_1_A_reverse_gray.png";
+import freight_locomotives_1_A_reverse_green from "./assets/freight_locomotives/loco_freight_1_A_reverse_green.png";
+import freight_locomotives_1_A_reverse_red from "./assets/freight_locomotives/loco_freight_1_A_reverse_red.png";
+import freight_locomotives_1_A_reverse_yellow from "./assets/freight_locomotives/loco_freight_1_A_reverse_yellow.png";
+
 import freight_locomotives_2_blue from "./assets/freight_locomotives/loco_freight_2_blue.png";
 import freight_locomotives_2_gray from "./assets/freight_locomotives/loco_freight_2_gray.png";
 import freight_locomotives_2_green from "./assets/freight_locomotives/loco_freight_2_green.png";
 import freight_locomotives_2_tan from "./assets/freight_locomotives/loco_freight_2_tan.png";
+import freight_locomotives_2_reverse_blue from "./assets/freight_locomotives/loco_freight_2_blue_reverse.png";
+import freight_locomotives_2_reverse_gray from "./assets/freight_locomotives/loco_freight_2_gray_reverse.png";
+import freight_locomotives_2_reverse_green from "./assets/freight_locomotives/loco_freight_2_green_reverse.png";
+import freight_locomotives_2_reverse_tan from "./assets/freight_locomotives/loco_freight_2_tan_reverse.png";
 
 import passenger_wagons_1a from "./assets/passenger_wagons/passenger_wagon_1a.png";
 import passenger_wagons_1b from "./assets/passenger_wagons/passenger_wagon_1b.png";
@@ -144,33 +159,83 @@ function initImageInventory() {
         passenger_locomotives_3_tan,
     ], { leftCoupling: 12, rightCoupling: 12 });
 
-    img.addType("freight_locomotive_section_a", [
-        freight_locomotives_1_2_blue
-    ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive_section_a", [
-        freight_locomotives_1_2_gray
-    ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive_section_a", [
-        freight_locomotives_1_2_green
-    ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive_section_a", [
-        freight_locomotives_1_2_red
-    ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive_section_a", [
-        freight_locomotives_1_2_yellow
-    ],  { leftCoupling: 9, rightCoupling: 9 });
-    img.addType("freight_locomotive", [
-        freight_locomotives_2_blue
-    ],  { leftCoupling: 14, rightCoupling: 8 });
-    img.addType("freight_locomotive", [
-        freight_locomotives_2_gray
-    ],  { leftCoupling: 14, rightCoupling: 8 });
-    img.addType("freight_locomotive", [
-        freight_locomotives_2_green
-    ],  { leftCoupling: 14, rightCoupling: 8 });
-    img.addType("freight_locomotive", [
-        freight_locomotives_2_tan
-    ],  { leftCoupling: 14, rightCoupling: 8 });
+    {
+        const idRevBlue = img.addType("freight_locomotive_reverse_section_a", [
+            freight_locomotives_1_A_reverse_blue
+        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true  });
+        const idRevGray = img.addType("freight_locomotive_reverse_section_a", [
+            freight_locomotives_1_A_reverse_gray
+        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+        const idRevGreen = img.addType("freight_locomotive_reverse_section_a", [
+            freight_locomotives_1_A_reverse_green
+        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+        const idRevRed = img.addType("freight_locomotive_reverse_section_a", [
+            freight_locomotives_1_A_reverse_red
+        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+        const idRevYellow = img.addType("freight _locomotive_reverse_section_a", [
+            freight_locomotives_1_A_reverse_yellow
+        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+
+        const idBlueB = img.addType("freight_locomotive_section_b", [
+            freight_locomotives_1_B_blue
+        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevBlue });
+        const idGrayB = img.addType("freight_locomotive_section_b", [
+            freight_locomotives_1_B_gray
+        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevGray });
+        const idGreenB = img.addType("freight_locomotive_section_b", [
+            freight_locomotives_1_B_green
+        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevGreen });
+        const idRedB = img.addType("freight_locomotive_section_b", [
+            freight_locomotives_1_B_red
+        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevRed });
+        const idYellowB = img.addType("freight_locomotive_section_b", [
+            freight_locomotives_1_B_yellow
+        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevYellow });
+
+        img.addType("freight_locomotive_section_a", [
+            freight_locomotives_1_A_blue
+        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevBlue, sectionB: idBlueB, isSectionA: true });
+        img.addType("freight_locomotive_section_a", [
+            freight_locomotives_1_A_gray
+        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevGray, sectionB: idGrayB, isSectionA: true });
+        img.addType("freight_locomotive_section_a", [
+            freight_locomotives_1_A_green
+        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevGreen, sectionB: idGreenB, isSectionA: true });
+        img.addType("freight_locomotive_section_a", [
+            freight_locomotives_1_A_red
+        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevRed, sectionB: idRedB, isSectionA: true });
+        img.addType("freight_locomotive_section_a", [
+            freight_locomotives_1_A_yellow
+        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevYellow, sectionB: idYellowB, isSectionA: true });
+    }
+
+    {
+        const idRevBlue = img.addType("freight_locomotive_reverse", [
+            freight_locomotives_2_reverse_blue
+        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+        const idRevGray = img.addType("freight_locomotive_reverse", [
+            freight_locomotives_2_reverse_gray
+        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+        const idRevGreen = img.addType("freight_locomotive_reverse", [
+            freight_locomotives_2_reverse_green
+        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+        const idRevTan = img.addType("freight_locomotive_reverse", [
+            freight_locomotives_2_reverse_tan
+        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+
+        img.addType("freight_locomotive", [
+            freight_locomotives_2_blue
+        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevBlue });
+        img.addType("freight_locomotive", [
+            freight_locomotives_2_gray
+        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevGray });
+        img.addType("freight_locomotive", [
+            freight_locomotives_2_green
+        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevGreen });
+        img.addType("freight_locomotive", [
+            freight_locomotives_2_tan
+        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevTan });
+    }
 
     img.addType("passenger_wagon", [
         passenger_wagons_1a,
