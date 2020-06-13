@@ -90,6 +90,7 @@ class Inventory {
             console.error("Inventory.addType", "not an array", paths);
             return;
         }
+        let ids = new Array();
         let cat = this.#idMap.get(category);
         if (cat === undefined) {
             cat = new Array();
@@ -99,6 +100,7 @@ class Inventory {
             if (typeof item != "string") {
                 console.error("Inventory.addType", "not a string", item, "at index", index);
             } else {
+                ids.push(this.#nextId);
                 t.push(this.#nextId);
                 this.#pathMap.set(this.#nextId, item);
                 this.#categoryMap.set(this.#nextId, category);
@@ -110,6 +112,7 @@ class Inventory {
         }, this);
         cat.push(t);
         this.#idMap.set(category, cat);
+        return ids;
     }
 
     randomInCategory(category, rng) {

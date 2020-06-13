@@ -54,6 +54,7 @@ import containter_wagons_red from "./assets/containter_wagons/container-red.png"
 import containter_wagons_tan from "./assets/containter_wagons/container-tan.png";
 import containter_wagons_white from "./assets/containter_wagons/container-white.png";
 import containter_wagons_yellow from "./assets/containter_wagons/container-yellow.png";
+import containter_wagons_empty from "./assets/containter_wagons/container-empty.png";
 
 import car_wagons_empty from "./assets/freight_wagons/car_transporter-empty.png";
 
@@ -61,11 +62,31 @@ import covered_wagon_blue from "./assets/freight_wagons/covered_wagon-blue.png";
 import covered_wagon_brown from "./assets/freight_wagons/covered_wagon-brown.png";
 import covered_wagon_green from "./assets/freight_wagons/covered_wagon-green.png";
 import covered_wagon_red from "./assets/freight_wagons/covered_wagon-red.png";
+import covered_wagon_long_1_blue from "./assets/freight_wagons/covered_wagon_long_1-blue.png";
+import covered_wagon_long_1_brown from "./assets/freight_wagons/covered_wagon_long_1-brown.png";
+import covered_wagon_long_1_green from "./assets/freight_wagons/covered_wagon_long_1-green.png";
+import covered_wagon_long_1_red from "./assets/freight_wagons/covered_wagon_long_1-red.png";
+import covered_wagon_long_2_blue from "./assets/freight_wagons/covered_wagon_long_2-blue.png";
+import covered_wagon_long_2_brown from "./assets/freight_wagons/covered_wagon_long_2-brown.png";
+import covered_wagon_long_2_green from "./assets/freight_wagons/covered_wagon_long_2-green.png";
+import covered_wagon_long_2_red from "./assets/freight_wagons/covered_wagon_long_2-red.png";
+import covered_wagon_long_3_blue from "./assets/freight_wagons/covered_wagon_long_3-blue.png";
+import covered_wagon_long_3_brown from "./assets/freight_wagons/covered_wagon_long_3-brown.png";
+import covered_wagon_long_3_green from "./assets/freight_wagons/covered_wagon_long_3-green.png";
+import covered_wagon_long_3_red from "./assets/freight_wagons/covered_wagon_long_3-red.png";
 
-import gondola_wagon_blue from "./assets/freight_wagons/gondola-blue.png";
-import gondola_wagon_brown from "./assets/freight_wagons/gondola-brown.png";
-import gondola_wagon_green from "./assets/freight_wagons/gondola-green.png";
-import gondola_wagon_red from "./assets/freight_wagons/gondola-red.png";
+import flat_wagon_blue from "./assets/freight_wagons/flatcar-blue.png";
+import flat_wagon_brown from "./assets/freight_wagons/flatcar-brown.png";
+import flat_wagon_green from "./assets/freight_wagons/flatcar-green.png";
+import flat_wagon_red from "./assets/freight_wagons/flatcar-red.png";
+import flat_wagon_medium_blue from "./assets/freight_wagons/flatcar_medium-blue.png";
+import flat_wagon_medium_brown from "./assets/freight_wagons/flatcar_medium-brown.png";
+import flat_wagon_medium_green from "./assets/freight_wagons/flatcar_medium-green.png";
+import flat_wagon_medium_red from "./assets/freight_wagons/flatcar_medium-red.png";
+import flat_wagon_long_blue from "./assets/freight_wagons/flatcar_long-blue.png";
+import flat_wagon_long_brown from "./assets/freight_wagons/flatcar_long-brown.png";
+import flat_wagon_long_green from "./assets/freight_wagons/flatcar_long-green.png";
+import flat_wagon_long_red from "./assets/freight_wagons/flatcar_long-red.png";
 
 import hopper_wagon_blue from "./assets/freight_wagons/hopper-blue.png";
 import hopper_wagon_red from "./assets/freight_wagons/hopper-red.png";
@@ -73,10 +94,23 @@ import hopper_wagon_tan from "./assets/freight_wagons/hopper-tan.png";
 import hopper_wagon_white from "./assets/freight_wagons/hopper-white.png";
 import hopper_wagon_yellow from "./assets/freight_wagons/hopper-yellow.png";
 
+import hopper_wagon_long_blue from "./assets/freight_wagons/hopper_long-blue.png";
+import hopper_wagon_long_red from "./assets/freight_wagons/hopper_long-red.png";
+import hopper_wagon_long_green from "./assets/freight_wagons/hopper_long-green.png";
+import hopper_wagon_long_white from "./assets/freight_wagons/hopper_long-white.png";
+
 import open_wagon_blue from "./assets/freight_wagons/open_wagon-blue.png";
 import open_wagon_gray from "./assets/freight_wagons/open_wagon-gray.png";
 import open_wagon_green from "./assets/freight_wagons/open_wagon-green.png";
 import open_wagon_red from "./assets/freight_wagons/open_wagon-red.png";
+import open_wagon_medium_blue from "./assets/freight_wagons/open_wagon_medium-blue.png";
+import open_wagon_medium_gray from "./assets/freight_wagons/open_wagon_medium-gray.png";
+import open_wagon_medium_green from "./assets/freight_wagons/open_wagon_medium-green.png";
+import open_wagon_medium_red from "./assets/freight_wagons/open_wagon_medium-red.png";
+import open_wagon_long_blue from "./assets/freight_wagons/open_wagon_long-blue.png";
+import open_wagon_long_gray from "./assets/freight_wagons/open_wagon_long-gray.png";
+import open_wagon_long_green from "./assets/freight_wagons/open_wagon_long-green.png";
+import open_wagon_long_red from "./assets/freight_wagons/open_wagon_long-red.png";
 
 import refrigerator_wagon_long_white from "./assets/freight_wagons/refrigerator_long-white.png";
 import refrigerator_wagon_white from "./assets/freight_wagons/refrigerator-white.png";
@@ -88,6 +122,7 @@ import tank_wagon_darkgray from "./assets/tank_wagons/tank-darkgray.png";
 import tank_wagon_gray from "./assets/tank_wagons/tank-gray.png";
 import tank_wagon_white from "./assets/tank_wagons/tank-white.png";
 import tank_wagon_yellow from "./assets/tank_wagons/tank-yellow.png";
+import tank_wagon_long_black from "./assets/tank_wagons/tank_long-black.png";
 
 
 function initImageInventory() {
@@ -168,6 +203,9 @@ function initImageInventory() {
     img.addType("container_wagon", [
         containter_wagons_yellow
     ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("container_wagon", [
+        containter_wagons_empty
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
     img.addType("car_wagon", [
         car_wagons_empty
@@ -185,18 +223,78 @@ function initImageInventory() {
     img.addType("covered_wagon", [
         covered_wagon_red
     ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_1_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_1_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_1_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_1_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_2_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_2_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_2_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_2_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_3_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_3_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_3_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("covered_wagon", [
+        covered_wagon_long_3_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
-    img.addType("gondola_wagon", [
-        gondola_wagon_blue
+    img.addType("flat_wagon", [
+        flat_wagon_blue
     ], { leftCoupling: 8, rightCoupling: 5 });
-    img.addType("gondola_wagon", [
-        gondola_wagon_brown
+    img.addType("flat_wagon", [
+        flat_wagon_brown
     ], { leftCoupling: 8, rightCoupling: 5 });
-    img.addType("gondola_wagon", [
-        gondola_wagon_green
+    img.addType("flat_wagon", [
+        flat_wagon_green
     ], { leftCoupling: 8, rightCoupling: 5 });
-    img.addType("gondola_wagon", [
-        gondola_wagon_red
+    img.addType("flat_wagon", [
+        flat_wagon_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_medium_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_medium_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_medium_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_medium_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_long_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_long_brown
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_long_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("flat_wagon", [
+        flat_wagon_long_red
     ], { leftCoupling: 8, rightCoupling: 5 });
 
     img.addType("hopper_wagon", [
@@ -214,6 +312,18 @@ function initImageInventory() {
     img.addType("hopper_wagon", [
         hopper_wagon_yellow
     ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_long_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_long_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_long_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("hopper_wagon", [
+        hopper_wagon_long_white
+    ], { leftCoupling: 8, rightCoupling: 5 });
 
     img.addType("open_wagon", [
         open_wagon_blue
@@ -226,6 +336,30 @@ function initImageInventory() {
     ], { leftCoupling: 8, rightCoupling: 5 });
     img.addType("open_wagon", [
         open_wagon_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_medium_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_medium_gray
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_medium_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_medium_red
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_long_blue
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_long_gray
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_long_green
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("open_wagon", [
+        open_wagon_long_red
     ], { leftCoupling: 8, rightCoupling: 5 });
 
     img.addType("refrigerator_wagon", [
@@ -253,6 +387,9 @@ function initImageInventory() {
     ], { leftCoupling: 8, rightCoupling: 5 });
     img.addType("tank_wagon", [
         tank_wagon_yellow
+    ], { leftCoupling: 8, rightCoupling: 5 });
+    img.addType("tank_wagon", [
+        tank_wagon_long_black
     ], { leftCoupling: 8, rightCoupling: 5 });
 
     return img;
