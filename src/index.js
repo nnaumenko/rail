@@ -461,9 +461,20 @@ function initImageInventory() {
 };
 
 import snd_locomotive_1 from "./assets/train_sounds/locomotive1.mp3";
+import snd_locomotive_2 from "./assets/train_sounds/locomotive2.mp3";
+import snd_locomotive_3 from "./assets/train_sounds/locomotive3.mp3";
+import snd_locomotive_4 from "./assets/train_sounds/locomotive4.mp3";
+import snd_locomotive_5 from "./assets/train_sounds/locomotive5.mp3";
 import snd_train_inout_1 from "./assets/train_sounds/train_in_out1.mp3";
 import snd_train_inout_2 from "./assets/train_sounds/train_in_out2.mp3";
+import snd_train_inout_3 from "./assets/train_sounds/train_in_out3.mp3";
+import snd_train_inout_4 from "./assets/train_sounds/train_in_out4.mp3";
+import snd_train_inout_5 from "./assets/train_sounds/train_in_out5.mp3";
 import snd_train_loop_1 from "./assets/train_sounds/train_loop1.mp3";
+import snd_train_loop_2 from "./assets/train_sounds/train_loop2.mp3";
+import snd_train_loop_3 from "./assets/train_sounds/train_loop3.mp3";
+import snd_train_loop_4 from "./assets/train_sounds/train_loop4.mp3";
+import snd_train_loop_5 from "./assets/train_sounds/train_loop5.mp3";
 import snd_wheels_1 from "./assets/train_sounds/wheels_5a.mp3";
 import snd_wheels_2 from "./assets/train_sounds/wheels_5b.mp3";
 import snd_wheels_3 from "./assets/train_sounds/wheels_5c.mp3";
@@ -483,16 +494,27 @@ function initSoundInventory() {
     var snd = new Assets.Inventory();
 
     snd.addType("locomotive", [
-        snd_locomotive_1
+        snd_locomotive_1,
+        snd_locomotive_2,
+        snd_locomotive_3,
+        snd_locomotive_4,
+        snd_locomotive_5
     ]);
 
     snd.addType("train_inout", [
         snd_train_inout_1,
-        snd_train_inout_2
+        snd_train_inout_2,
+        snd_train_inout_3,
+        snd_train_inout_4,
+        snd_train_inout_5
     ]);
 
     snd.addType("train_loop", [
-        snd_train_loop_1
+        snd_train_loop_1,
+        snd_train_loop_2,
+        snd_train_loop_3,
+        snd_train_loop_4,
+        snd_train_loop_5
     ]);
 
     snd.addType("wheels", [
