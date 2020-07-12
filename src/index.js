@@ -502,12 +502,24 @@ function initSoundInventory() {
     ]);
 
     snd.addType("train_inout", [
-        snd_train_inout_1,
-        snd_train_inout_2,
-        snd_train_inout_3,
-        snd_train_inout_4,
+        snd_train_inout_1
+    ], {attack: 3200, decay: 3378});
+
+    snd.addType("train_inout", [
+        snd_train_inout_2
+    ], {attack: 2500, decay: 2300});
+
+    snd.addType("train_inout", [
+        snd_train_inout_3
+    ], {attack: 3600, decay: 4629});
+
+    snd.addType("train_inout", [
+        snd_train_inout_4
+    ], {attack: 3400, decay: 4270});
+
+    snd.addType("train_inout", [
         snd_train_inout_5
-    ]);
+    ], {attack: 2000, decay: 2050});
 
     snd.addType("train_loop", [
         snd_train_loop_1,
@@ -581,8 +593,8 @@ class TrainAnimation {
 
     get constants() {
         return {
-            loopSndDelayInMs: 3000,
-            loopSndDelayOutMs: 3000,
+            //loopSndDelayInMs: 3000,
+            //loopSndDelayOutMs: 3000,
             referenceSndSpeedRate: 750
         };
     }
@@ -627,7 +639,7 @@ class TrainAnimation {
             this.#createTrainInScene();
         }, this);
         this.#playSound(snd);
-        const loopDelay = this.constants.loopSndDelayInMs;
+        const loopDelay = this.#soundInventory.getAttributes(this.#config.sounds.intro).attack;
         this.#timedEvents.push(this.#scene.time.delayedCall(
             loopDelay,
             this.#playSound,
@@ -681,7 +693,11 @@ class TrainAnimation {
         }, this);
 
         const lastSoundDelay = (trainLen - sizeX / 2) / speed / scale * msPerSecond;
-        const loopSoundStopDelay = lastSoundDelay + this.constants.loopSndDelayOutMs;
+        const loopSoundStopDelay = lastSoundDelay;
+        const outroSoundStopDelay = 
+            lastSoundDelay - this.#soundInventory.getAttributes(this.#config.sounds.outro).decay;
+        
+        + this.constants.loopSndDelayOutMs;
         this.#config.sounds.train[this.#config.train.length].forEach(function (sndId) {
             let snd = this.#scene.sound.add('tr_snd_' + String(sndId));
             snd.rate = speed / this.constants.referenceSndSpeedRate;
@@ -691,7 +707,7 @@ class TrainAnimation {
             this.#scene.time.delayedCall(loopSoundStopDelay, this.#stopSound, [this.#sndLoop], this)
         );
         this.#timedEvents.push(
-            this.#scene.time.delayedCall(lastSoundDelay, this.#playOutroSound, [], this)
+            this.#scene.time.delayedCall(outroSoundStopDelay, this.#playOutroSound, [], this)
         );
 
         Phaser.Actions.Call(this.#trainGroup.getChildren(), function (spr) {
