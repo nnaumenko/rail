@@ -15,8 +15,11 @@ import Landscape from "./landscape.js";
 const screenLayout = {
     width: 1024,
     height: 576,
-    groundHeight: 480,
-    railHeight: 8
+    horizonHeight: 199,
+    railHeight1: 428,
+    railSize1: 9,
+    railHeight2: 455,
+    railSize2: 13
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -162,79 +165,79 @@ function initImageInventory() {
     {
         const idRevBlue = img.addType("freight_locomotive_reverse_section_a", [
             freight_locomotives_1_A_reverse_blue
-        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true  });
+        ], { leftCoupling: 7, rightCoupling: 20, isReverse: true });
         const idRevGray = img.addType("freight_locomotive_reverse_section_a", [
             freight_locomotives_1_A_reverse_gray
-        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+        ], { leftCoupling: 7, rightCoupling: 20, isReverse: true });
         const idRevGreen = img.addType("freight_locomotive_reverse_section_a", [
             freight_locomotives_1_A_reverse_green
-        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+        ], { leftCoupling: 7, rightCoupling: 20, isReverse: true });
         const idRevRed = img.addType("freight_locomotive_reverse_section_a", [
             freight_locomotives_1_A_reverse_red
-        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+        ], { leftCoupling: 7, rightCoupling: 20, isReverse: true });
         const idRevYellow = img.addType("freight _locomotive_reverse_section_a", [
             freight_locomotives_1_A_reverse_yellow
-        ],  { leftCoupling: 7, rightCoupling: 20, isReverse: true });
+        ], { leftCoupling: 7, rightCoupling: 20, isReverse: true });
 
         const idBlueB = img.addType("freight_locomotive_section_b", [
             freight_locomotives_1_B_blue
-        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevBlue });
+        ], { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevBlue });
         const idGrayB = img.addType("freight_locomotive_section_b", [
             freight_locomotives_1_B_gray
-        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevGray });
+        ], { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevGray });
         const idGreenB = img.addType("freight_locomotive_section_b", [
             freight_locomotives_1_B_green
-        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevGreen });
+        ], { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevGreen });
         const idRedB = img.addType("freight_locomotive_section_b", [
             freight_locomotives_1_B_red
-        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevRed });
+        ], { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevRed });
         const idYellowB = img.addType("freight_locomotive_section_b", [
             freight_locomotives_1_B_yellow
-        ],  { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevYellow });
+        ], { leftCoupling: 7, rightCoupling: 8, isSectionB: true, reverse: idRevYellow });
 
         img.addType("freight_locomotive_section_a", [
             freight_locomotives_1_A_blue
-        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevBlue, sectionB: idBlueB, isSectionA: true });
+        ], { leftCoupling: 19, rightCoupling: 7, reverse: idRevBlue, sectionB: idBlueB, isSectionA: true });
         img.addType("freight_locomotive_section_a", [
             freight_locomotives_1_A_gray
-        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevGray, sectionB: idGrayB, isSectionA: true });
+        ], { leftCoupling: 19, rightCoupling: 7, reverse: idRevGray, sectionB: idGrayB, isSectionA: true });
         img.addType("freight_locomotive_section_a", [
             freight_locomotives_1_A_green
-        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevGreen, sectionB: idGreenB, isSectionA: true });
+        ], { leftCoupling: 19, rightCoupling: 7, reverse: idRevGreen, sectionB: idGreenB, isSectionA: true });
         img.addType("freight_locomotive_section_a", [
             freight_locomotives_1_A_red
-        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevRed, sectionB: idRedB, isSectionA: true });
+        ], { leftCoupling: 19, rightCoupling: 7, reverse: idRevRed, sectionB: idRedB, isSectionA: true });
         img.addType("freight_locomotive_section_a", [
             freight_locomotives_1_A_yellow
-        ],  { leftCoupling: 19, rightCoupling: 7, reverse: idRevYellow, sectionB: idYellowB, isSectionA: true });
+        ], { leftCoupling: 19, rightCoupling: 7, reverse: idRevYellow, sectionB: idYellowB, isSectionA: true });
     }
 
     {
         const idRevBlue = img.addType("freight_locomotive_reverse", [
             freight_locomotives_2_reverse_blue
-        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+        ], { leftCoupling: 14, rightCoupling: 8, isReverse: true });
         const idRevGray = img.addType("freight_locomotive_reverse", [
             freight_locomotives_2_reverse_gray
-        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+        ], { leftCoupling: 14, rightCoupling: 8, isReverse: true });
         const idRevGreen = img.addType("freight_locomotive_reverse", [
             freight_locomotives_2_reverse_green
-        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+        ], { leftCoupling: 14, rightCoupling: 8, isReverse: true });
         const idRevTan = img.addType("freight_locomotive_reverse", [
             freight_locomotives_2_reverse_tan
-        ],  { leftCoupling: 14, rightCoupling: 8, isReverse: true });
+        ], { leftCoupling: 14, rightCoupling: 8, isReverse: true });
 
         img.addType("freight_locomotive", [
             freight_locomotives_2_blue
-        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevBlue });
+        ], { leftCoupling: 14, rightCoupling: 8, reverse: idRevBlue });
         img.addType("freight_locomotive", [
             freight_locomotives_2_gray
-        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevGray });
+        ], { leftCoupling: 14, rightCoupling: 8, reverse: idRevGray });
         img.addType("freight_locomotive", [
             freight_locomotives_2_green
-        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevGreen });
+        ], { leftCoupling: 14, rightCoupling: 8, reverse: idRevGreen });
         img.addType("freight_locomotive", [
             freight_locomotives_2_tan
-        ],  { leftCoupling: 14, rightCoupling: 8, reverse: idRevTan });
+        ], { leftCoupling: 14, rightCoupling: 8, reverse: idRevTan });
     }
 
     img.addType("passenger_wagon", [
@@ -503,23 +506,23 @@ function initSoundInventory() {
 
     snd.addType("train_inout", [
         snd_train_inout_1
-    ], {attack: 3200, decay: 3378});
+    ], { attack: 3200, decay: 3378 });
 
     snd.addType("train_inout", [
         snd_train_inout_2
-    ], {attack: 2500, decay: 2300});
+    ], { attack: 2500, decay: 2300 });
 
     snd.addType("train_inout", [
         snd_train_inout_3
-    ], {attack: 3600, decay: 4629});
+    ], { attack: 3600, decay: 4629 });
 
     snd.addType("train_inout", [
         snd_train_inout_4
-    ], {attack: 3400, decay: 4270});
+    ], { attack: 3400, decay: 4270 });
 
     snd.addType("train_inout", [
         snd_train_inout_5
-    ], {attack: 2000, decay: 2050});
+    ], { attack: 2000, decay: 2050 });
 
     snd.addType("train_loop", [
         snd_train_loop_1,
@@ -593,8 +596,6 @@ class TrainAnimation {
 
     get constants() {
         return {
-            //loopSndDelayInMs: 3000,
-            //loopSndDelayOutMs: 3000,
             referenceSndSpeedRate: 750
         };
     }
@@ -608,9 +609,9 @@ class TrainAnimation {
     #timedEvent;
     #trainActive;
     #screenLayout = {
-        posRailsY: 576,
-        posLeftX: 0,
-        posRightX: 1024,
+        posRailsY: screenLayout.railHeight2,
+        posLeftX: screenLayout.width,
+        posRightX: screenLayout.height,
         scale: 1,
         zOrder: 8
     };
@@ -694,9 +695,9 @@ class TrainAnimation {
 
         const lastSoundDelay = (trainLen - sizeX / 2) / speed / scale * msPerSecond;
         const loopSoundStopDelay = lastSoundDelay;
-        const outroSoundStopDelay = 
+        const outroSoundStopDelay =
             lastSoundDelay - this.#soundInventory.getAttributes(this.#config.sounds.outro).decay;
-        
+
         + this.constants.loopSndDelayOutMs;
         this.#config.sounds.train[this.#config.train.length].forEach(function (sndId) {
             let snd = this.#scene.sound.add('tr_snd_' + String(sndId));
@@ -817,7 +818,7 @@ class LandscapeAnimation {
 
         console.debug("Loading landscape sounds");
 
-        this.#scene.load.once('complete', function() {
+        this.#scene.load.once('complete', function () {
             console.debug("Landscape assets loaded");
             this.#assetsLoading = false;
         }, this);
@@ -832,7 +833,7 @@ class LandscapeAnimation {
 
         if (this.isLoading) {
             console.debug("Waiting for assets to load");
-            while (this.isLoading) {}
+            while (this.isLoading) { }
             console.debug("Finish waiting for assets to load");
         }
 
@@ -844,26 +845,36 @@ class LandscapeAnimation {
     #createForegroundInScene() {
         console.debug("Creating landscape foreground");
 
-        const groundY = screenLayout.groundHeight + screenLayout.railHeight
-        this.#scene.add.rectangle(0,
-            0,
-            this.#screenLayout.width,
-            this.#screenLayout.height,
-            0x3498d8).setOrigin(0, 0);
-        this.#scene.add.rectangle(0,
-            groundY,
-            this.#screenLayout.width,
-            this.#screenLayout.height - groundY,
-            0xa04000).setOrigin(0, 0);
-        this.#scene.add.rectangle(0,
-            this.#screenLayout.groundHeight + 1,
-            this.#screenLayout.width,
-            this.#screenLayout.railHeight,
-            0x333344).setOrigin(0, 0);
     }
 
     #createBackgroundInScene() {
         console.debug("Creating landscape background");
+        // Sky
+        var graphics = this.#scene.add.graphics();
+        graphics.fillGradientStyle(
+            this.#config.colours.sky, this.#config.colours.sky, 
+            this.#config.colours.horizon, this.#config.colours.horizon, 1);
+        graphics.fillRect(0, 0,
+            this.#screenLayout.width, this.#screenLayout.height);
+
+        //        this.#scene.add.rectangle(
+        //            0, 0,
+        //            this.#screenLayout.width, this.#screenLayout.horizonHeight,
+        //            this.#config.colours.sky).setOrigin(0, 0);
+        // Ground
+        this.#scene.add.rectangle(0, this.#screenLayout.horizonHeight,
+            this.#screenLayout.width,
+            this.#screenLayout.height - this.#screenLayout.horizonHeight,
+            this.#config.colours.ground).setOrigin(0, 0);
+        // Rails: temporary, to be replaced with sprite
+        this.#scene.add.rectangle(0, this.#screenLayout.railHeight1,
+            this.#screenLayout.width, this.#screenLayout.railSize1,
+            0x333344).setOrigin(0, 0);
+        this.#scene.add.rectangle(0, this.#screenLayout.railHeight2,
+            this.#screenLayout.width, this.#screenLayout.railSize2,
+            0x333344).setOrigin(0, 0);
+
+
     }
 
     #scene;
@@ -904,7 +915,7 @@ class MainScene extends Phaser.Scene {
             this.#sndInventory);
         this.#train.leftPosition = 0;
         this.#train.rightPosition = screenLayout.width;
-        this.#train.railsPosition = 480;
+        this.#train.railsPosition = screenLayout.railHeight2;
 
         this.#landscape = new LandscapeAnimation(
             this,
