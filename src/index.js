@@ -16,10 +16,9 @@ const screenLayout = {
     width: 1024,
     height: 576,
     horizonHeight: 199,
-    railHeight1: 428,
-    railSize1: 9,
-    railHeight2: 455,
-    railSize2: 13
+    railHeight1: 452,
+    railScale1: 1.4,
+    trainWheelHeight: 455
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -142,6 +141,40 @@ import tank_wagon_white from "./assets/tank_wagons/tank-white.png";
 import tank_wagon_yellow from "./assets/tank_wagons/tank-yellow.png";
 import tank_wagon_long_black from "./assets/tank_wagons/tank_long-black.png";
 
+import cloud_white_large_1 from "./assets/clouds/cloud_large_01.png";
+import cloud_white_medium_1 from "./assets/clouds/cloud_medium_01.png";
+import cloud_white_medium_2 from "./assets/clouds/cloud_medium_03.png";
+import cloud_white_medium_3 from "./assets/clouds/cloud_medium_02.png";
+import cloud_white_small_1 from "./assets/clouds/cloud_small_01.png";
+import cloud_white_small_2 from "./assets/clouds/cloud_small_02.png";
+import cloud_white_small_3 from "./assets/clouds/cloud_small_03.png";
+import cloud_white_large_windy_1 from "./assets/clouds/cloud_large_windy_01.png";
+import cloud_white_medium_windy_1 from "./assets/clouds/cloud_medium_windy_01.png";
+import cloud_white_medium_windy_2 from "./assets/clouds/cloud_medium_windy_02.png";
+import cloud_white_medium_windy_3 from "./assets/clouds/cloud_medium_windy_03.png";
+import cloud_white_medium_windy_4 from "./assets/clouds/cloud_medium_windy_04.png";
+import cloud_white_small_windy_1 from "./assets/clouds/cloud_small_windy_01.png";
+import cloud_white_small_windy_2 from "./assets/clouds/cloud_small_windy_02.png";
+import cloud_white_small_windy_3 from "./assets/clouds/cloud_small_windy_03.png";
+import cloud_white_small_windy_4 from "./assets/clouds/cloud_small_windy_04.png";
+
+import cloud_dark_medium_1 from "./assets/clouds-dark/cloud_medium_01.png";
+import cloud_dark_medium_2 from "./assets/clouds-dark/cloud_medium_03.png";
+import cloud_dark_medium_3 from "./assets/clouds-dark/cloud_medium_02.png";
+import cloud_dark_small_1 from "./assets/clouds-dark/cloud_small_01.png";
+import cloud_dark_small_2 from "./assets/clouds-dark/cloud_small_02.png";
+import cloud_dark_small_3 from "./assets/clouds-dark/cloud_small_03.png";
+import cloud_dark_medium_windy_1 from "./assets/clouds-dark/cloud_medium_windy_01.png";
+import cloud_dark_medium_windy_2 from "./assets/clouds-dark/cloud_medium_windy_02.png";
+import cloud_dark_medium_windy_3 from "./assets/clouds-dark/cloud_medium_windy_03.png";
+import cloud_dark_medium_windy_4 from "./assets/clouds-dark/cloud_medium_windy_04.png";
+import cloud_dark_medium_windy_5 from "./assets/clouds-dark/cloud_medium_windy_05.png";
+import cloud_dark_small_windy_1 from "./assets/clouds-dark/cloud_small_windy_01.png";
+import cloud_dark_small_windy_2 from "./assets/clouds-dark/cloud_small_windy_02.png";
+import cloud_dark_small_windy_3 from "./assets/clouds-dark/cloud_small_windy_03.png";
+import cloud_dark_small_windy_4 from "./assets/clouds-dark/cloud_small_windy_04.png";
+
+import rails_image from "./assets/landscape/rails.png";
 
 function initImageInventory() {
     var img = new Assets.Inventory();
@@ -459,6 +492,63 @@ function initImageInventory() {
     img.addType("tank_wagon", [
         tank_wagon_long_black
     ], { leftCoupling: 8, rightCoupling: 5 });
+
+    img.addType("cloud_white_large", [
+        cloud_white_large_1
+    ], {});
+    img.addType("cloud_white_large_windy", [
+        cloud_white_large_windy_1
+    ], {});
+    img.addType("cloud_white_medium", [
+        cloud_white_medium_1,
+        cloud_white_medium_2,
+        cloud_white_medium_3
+    ], {});
+    img.addType("cloud_white_medium_windy", [
+        cloud_white_medium_windy_1,
+        cloud_white_medium_windy_2,
+        cloud_white_medium_windy_3,
+        cloud_white_medium_windy_4
+    ], {});
+    img.addType("cloud_white_small", [
+        cloud_white_small_1,
+        cloud_white_small_2,
+        cloud_white_small_3
+    ], {});
+    img.addType("cloud_white_small_windy", [
+        cloud_white_small_windy_1,
+        cloud_white_small_windy_2,
+        cloud_white_small_windy_3,
+        cloud_white_small_windy_4
+    ], {});
+
+    img.addType("cloud_dark_medium", [
+        cloud_dark_medium_1,
+        cloud_dark_medium_2,
+        cloud_dark_medium_3
+    ], {});
+    img.addType("cloud_dark_medium_windy", [
+        cloud_dark_medium_windy_1,
+        cloud_dark_medium_windy_2,
+        cloud_dark_medium_windy_3,
+        cloud_dark_medium_windy_4,
+        cloud_dark_medium_windy_5
+    ], {});
+    img.addType("cloud_dark_small", [
+        cloud_dark_small_1,
+        cloud_dark_small_2,
+        cloud_dark_small_3
+    ], {});
+    img.addType("cloud_dark_small_windy", [
+        cloud_dark_small_windy_1,
+        cloud_dark_small_windy_2,
+        cloud_dark_small_windy_3,
+        cloud_dark_small_windy_4,
+    ], {});
+
+    img.addType("rails", [
+        rails_image
+    ], {});
 
     return img;
 };
@@ -812,34 +902,64 @@ class LandscapeAnimation {
 
     get isLoading() { return this.#assetsLoading; }
 
+    #loadClouds() {
+        let clouds = [];
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_large"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_large_windy"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_medium"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_medium_windy"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_small"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_small_windy"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_dark_medium"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_dark_medium_windy"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_dark_small"));
+        clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_dark_small_windy"));
+        clouds.forEach(id => {
+            const imgPath = this.#imageInventory.getPathById(id);
+            this.#scene.load.image("cloud_" + String(id), imgPath);
+        }, this);
+    }
+
+    #loadRails() {
+        const ids = this.#imageInventory.getAllIdsInCategory("rails");
+        const imgPath = this.#imageInventory.getPathById(ids[0]);
+        this.#scene.load.image("rails", imgPath);
+    }
+
     loadAssets() {
         this.#assetsLoading = true;
+
         console.debug("Loading landscape images");
+        this.#loadClouds();
+        this.#loadRails();
 
         console.debug("Loading landscape sounds");
 
-        this.#scene.load.once('complete', function () {
-            console.debug("Landscape assets loaded");
-            this.#assetsLoading = false;
-        }, this);
         this.#scene.load.start();
     }
 
     setup(cfg) {
         console.debug("Setting up landscape");
         this.#config = cfg;
+        this.loadAssets();
 
         console.debug("Landscape configuration", this.#config);
 
+        this.#scene.load.once('complete', function () {
+            console.debug("Landscape assets loaded");
+            this.#assetsLoading = false;
+            this.#createForegroundInScene();
+            this.#createBackgroundInScene();
+            console.debug("Landscape setup complete");
+        }, this);
+
+/*
         if (this.isLoading) {
             console.debug("Waiting for assets to load");
             while (this.isLoading) { }
             console.debug("Finish waiting for assets to load");
-        }
+        }*/
 
-        this.#createForegroundInScene();
-        this.#createBackgroundInScene();
-        console.debug("Landscape setup complete");
     }
 
     #createForegroundInScene() {
@@ -852,27 +972,19 @@ class LandscapeAnimation {
         // Sky
         var graphics = this.#scene.add.graphics();
         graphics.fillGradientStyle(
-            this.#config.colours.sky, this.#config.colours.sky, 
+            this.#config.colours.sky, this.#config.colours.sky,
             this.#config.colours.horizon, this.#config.colours.horizon, 1);
         graphics.fillRect(0, 0,
             this.#screenLayout.width, this.#screenLayout.height);
-
-        //        this.#scene.add.rectangle(
-        //            0, 0,
-        //            this.#screenLayout.width, this.#screenLayout.horizonHeight,
-        //            this.#config.colours.sky).setOrigin(0, 0);
         // Ground
         this.#scene.add.rectangle(0, this.#screenLayout.horizonHeight,
             this.#screenLayout.width,
             this.#screenLayout.height - this.#screenLayout.horizonHeight,
             this.#config.colours.ground).setOrigin(0, 0);
-        // Rails: temporary, to be replaced with sprite
-        this.#scene.add.rectangle(0, this.#screenLayout.railHeight1,
-            this.#screenLayout.width, this.#screenLayout.railSize1,
-            0x333344).setOrigin(0, 0);
-        this.#scene.add.rectangle(0, this.#screenLayout.railHeight2,
-            this.#screenLayout.width, this.#screenLayout.railSize2,
-            0x333344).setOrigin(0, 0);
+        // Rails
+        this.#scene.add.image(this.#screenLayout.width / 2, 
+            this.#screenLayout.railHeight1, 
+            "rails").setScale(this.#screenLayout.railScale1);
 
 
     }
@@ -915,7 +1027,7 @@ class MainScene extends Phaser.Scene {
             this.#sndInventory);
         this.#train.leftPosition = 0;
         this.#train.rightPosition = screenLayout.width;
-        this.#train.railsPosition = screenLayout.railHeight2;
+        this.#train.railsPosition = screenLayout.trainWheelHeight;
 
         this.#landscape = new LandscapeAnimation(
             this,

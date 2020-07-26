@@ -133,6 +133,22 @@ class Inventory {
         const c = this.getCategoryById(id);
         return this.randomInType(c, t, rng);
     }
+
+    getAllIdsInType(category, type) {
+        const variants = this.countVariantsInType(category, type);
+        let result = [];
+        for (let i=0; i<variants; i++)
+            result.push(this.getId(category, type, i));
+        return result;
+    }
+
+    getAllIdsInCategory(category) {
+        const types = this.countTypesInCategory(category);
+        let result = [];
+        for (let i=0; i<types; i++)
+            result = result.concat(this.getAllIdsInType(category, i));
+        return result;
+    }
 };
 
 module.exports = {
