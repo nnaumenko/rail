@@ -63,20 +63,22 @@ function generateSkyAndWind(rng) {
     let skyAndWind = {};
 
     // Wind (cloud direction and speed)
-    const wind = rng.range(0, 101);
+    const minWind = 3;
+    const maxWind = 50;
+    const wind = rng.range(minWind, maxWind);
     const windDir = rng.range(0, 2);
     skyAndWind.wind = wind;
     if (windDir) skyAndWind.wind = -skyAndWind.wind;
 
     // 'windy' flag: allows 'windy' cloud appearance
-    if (wind >= 50) skyAndWind.windy = true;
+    if (wind >= maxWind/2) skyAndWind.windy = true;
 
     // Sky colour and type, amount of clouds (in percent), haze/mist...
     skyAndWind.sky = 'blue';
     skyAndWind.clouds = 'white';
     skyAndWind.sky_colour = 0x3498d8;
     skyAndWind.horizon_colour = 0x75b1d8;
-    skyAndWind.cloud_amount_large = rng.range(0, 100);
+    skyAndWind.cloud_amount_large = rng.range(0, 10);
     skyAndWind.cloud_amount_medium = rng.range(0, 100);
     skyAndWind.cloud_amount_small = rng.range(0, 100);
     const skyType = rng.range(0, 2);

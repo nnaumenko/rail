@@ -18,7 +18,15 @@ const screenLayout = {
     horizonHeight: 199,
     railHeight1: 452,
     railScale1: 1.4,
-    trainWheelHeight: 455
+    trainWheelHeight: 455,
+    clouds: {
+        amount: 20,
+        ymin: 40,
+        ymax: 180,
+        szmin: 75,
+        szmax: 125,
+        speedfactor: 1.0,
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -582,6 +590,7 @@ import snd_wheels_inout_4 from "./assets/train_sounds/wheels2_5d.mp3";
 import snd_wheels_inout_5 from "./assets/train_sounds/wheels2_5e.mp3";
 import snd_wheels_inout_6 from "./assets/train_sounds/wheels2_5f.mp3";
 import snd_wheels_inout_7 from "./assets/train_sounds/wheels2_5g.mp3";
+import { strategy } from "webpack-merge";
 
 function initSoundInventory() {
     var snd = new Assets.Inventory();
@@ -886,18 +895,20 @@ class TrainAnimation {
 
 ///////////////////////////////////////////////////////////////////////
 // class LandscapeAnimation
-// Creates and sets up background and foreground of landscape.
+// Creates and sets up cloud animation, background and foreground of landscape.
 // Once created, landscape is operated continuously, assets are 
 // kept in memory.
 // Currently there is no functionality to remove the landscape.
 ///////////////////////////////////////////////////////////////////////
 
 class LandscapeAnimation {
-    constructor(scene, img, snd, layout, config) {
+    constructor(scene, img, snd, layout, rng) {
         this.#scene = scene;
         this.#imageInventory = img;
         this.#soundInventory = snd;
         this.#screenLayout = layout;
+        this.#rng = rng;
+        this.#cloudImages = [];
     }
 
     get isLoading() { return this.#assetsLoading; }
@@ -926,6 +937,54 @@ class LandscapeAnimation {
         this.#scene.load.image("rails", imgPath);
     }
 
+    #getCloudSpriteId() {
+        // select one option of "large", "medium", "small" as a weighted random 
+        // of value with weights config.clouds.large, config.clouds.medium, 
+        // config.clouds.small
+        const randomCloudSize = this.#rng.range(0,
+            this.#config.clouds.large +
+            this.#config.clouds.medium +
+            this.#config.clouds.small);
+        let cloudSize = "medium";
+        if (randomCloudSize < this.#config.clouds.large) cloudSize = "large";
+        if (randomCloudSize >= this.#config.clouds.large + this.#config.clouds.medium)
+            cloudSize = "small";
+
+        // make cloud category string: 
+        // cloud_(white|dark)_(large|medium|small)(_windy)?
+        const cloudCategory = "cloud_" +
+            this.#config.clouds.type + "_" +
+            cloudSize +
+            (this.#config.windy ? "_windy" : "");
+
+        return this.#imageInventory.randomInCategory(cloudCategory, this.#rng);
+    }
+
+    #makeCloud(image, init) {
+        const rightToLeft = (this.#config.clouds.speed < 0)
+        const w = this.#screenLayout.width;
+        const margin = this.#screenLayout.width / 2;
+        const xmin = (init || !rightToLeft) ? (-w - margin) : (w + margin);
+        const xmax = (init || rightToLeft) ? (w * 2 + margin) : (-margin);
+
+        const id = this.#getCloudSpriteId();
+        const name = "cloud_" + id.toString();
+        const x = this.#rng.range(xmin, xmax);
+        const y = this.#rng.range(this.#screenLayout.clouds.ymin,
+            this.#screenLayout.clouds.ymax);
+        const sz = this.#rng.range(this.#screenLayout.clouds.szmin,
+            this.#screenLayout.clouds.szmax) / 100.0;
+        const speed = this.#config.clouds.speed * this.#screenLayout.clouds.speedfactor * this.#rng.range(90, 110) / 100.0;;
+        image.setTexture(name);
+        image.setX(x);
+        image.setY(y);
+        image.setScale(sz);
+        image.setVelocity(speed, 0);
+        image.setOrigin(0.5, 1);
+        //        this.#scene.physics.add.image(x, y, name).setScale(sz).setVelocity(speed, 0);
+        //        console.log(id, name, x, y, sz, speed);
+    }
+
     loadAssets() {
         this.#assetsLoading = true;
 
@@ -952,14 +1011,6 @@ class LandscapeAnimation {
             this.#createBackgroundInScene();
             console.debug("Landscape setup complete");
         }, this);
-
-/*
-        if (this.isLoading) {
-            console.debug("Waiting for assets to load");
-            while (this.isLoading) { }
-            console.debug("Finish waiting for assets to load");
-        }*/
-
     }
 
     #createForegroundInScene() {
@@ -976,17 +1027,39 @@ class LandscapeAnimation {
             this.#config.colours.horizon, this.#config.colours.horizon, 1);
         graphics.fillRect(0, 0,
             this.#screenLayout.width, this.#screenLayout.height);
+        // Clouds
+        for (let i = 0; i < this.#screenLayout.clouds.amount; i++) {
+            let img = this.#scene.physics.add.image(0, 0, "placeholder");
+            this.#makeCloud(img, true);
+            this.#cloudImages.push(img);
+        }
+        this.#scene.time.addEvent(
+            {
+                delay: 100,
+                callback: this.#updateClouds,
+                callbackScope: this,
+                loop: true
+            });
         // Ground
         this.#scene.add.rectangle(0, this.#screenLayout.horizonHeight,
             this.#screenLayout.width,
             this.#screenLayout.height - this.#screenLayout.horizonHeight,
             this.#config.colours.ground).setOrigin(0, 0);
         // Rails
-        this.#scene.add.image(this.#screenLayout.width / 2, 
-            this.#screenLayout.railHeight1, 
+        this.#scene.add.image(this.#screenLayout.width / 2,
+            this.#screenLayout.railHeight1,
             "rails").setScale(this.#screenLayout.railScale1);
+    }
 
-
+    #updateClouds() {
+        const rightToLeft = (this.#config.clouds.speed < 0);
+        const w = this.#screenLayout.width;
+        this.#cloudImages.forEach(function (item, index, array) {
+            if ((rightToLeft && item.x < -w) || (!rightToLeft && item.x > w * 2)) {
+                this.#makeCloud(array[index], false);
+                //console.log("redraw cloud", index);
+            }
+        }, this);
     }
 
     #scene;
@@ -995,6 +1068,8 @@ class LandscapeAnimation {
     #screenLayout;
     #config;
     #assetsLoading;
+    #rng;
+    #cloudImages;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -1016,7 +1091,6 @@ class MainScene extends Phaser.Scene {
         this.#imgInventory = img;
         this.#sndInventory = snd;
 
-        //var seedsRandGen = new RNG(getSeed());
         let seedsRandGen = new Random.MT(getSeed());
         this.#landscapeRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
         this.#trainRandGen = new Random.MT(seedsRandGen.range(0, 0x7fffffff));
@@ -1033,7 +1107,8 @@ class MainScene extends Phaser.Scene {
             this,
             this.#imgInventory,
             this.#sndInventory,
-            screenLayout
+            screenLayout,
+            this.#landscapeRandGen
         );
     };
     #imgInventory;
@@ -1056,10 +1131,13 @@ class MainScene extends Phaser.Scene {
 
         this.#landscape.setup(landscapeConfig);
 
-        this.#train.setup(Train.generate(
+        const trainConfig = Train.generate(
             this.#imgInventory,
             this.#sndInventory,
-            this.#trainRandGen));
+            this.#trainRandGen);
+        trainConfig.delay = 1500; // Much shorter delay for first train
+
+        this.#train.setup(trainConfig);
         //timerText = this.add.text(32, 32);
     }
 
