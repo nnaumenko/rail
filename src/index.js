@@ -914,6 +914,7 @@ class LandscapeAnimation {
     get isLoading() { return this.#assetsLoading; }
 
     #loadClouds() {
+        // TODO: load only cloud of needed type (e.g. only white and windy) 
         let clouds = [];
         clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_large"));
         clouds = clouds.concat(this.#imageInventory.getAllIdsInCategory("cloud_white_large_windy"));
@@ -955,7 +956,8 @@ class LandscapeAnimation {
         const cloudCategory = "cloud_" +
             this.#config.clouds.type + "_" +
             cloudSize +
-            (this.#config.windy ? "_windy" : "");
+            (this.#config.clouds.windy ? "_windy" : "");
+        
 
         return this.#imageInventory.randomInCategory(cloudCategory, this.#rng);
     }
@@ -981,8 +983,7 @@ class LandscapeAnimation {
         image.setScale(sz);
         image.setVelocity(speed, 0);
         image.setOrigin(0.5, 1);
-        //        this.#scene.physics.add.image(x, y, name).setScale(sz).setVelocity(speed, 0);
-        //        console.log(id, name, x, y, sz, speed);
+        if (rightToLeft) image.setScale(-sz, sz);
     }
 
     loadAssets() {
