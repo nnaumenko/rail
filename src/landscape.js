@@ -28,6 +28,9 @@ function generate(img, snd, rng) {
     landscape.clouds.small = sky.cloud_amount_small;
     if (sky.windy) landscape.clouds.windy = true;
     landscape.clouds.speed = sky.wind;
+    // Adjust snow colour: snow is very bright in sunny weather
+    if (landscape.season == 'winter' && landscape.sky_type == 'blue')
+        landscape.colours.ground = 0xffffff;
     return landscape;
 }
 
@@ -77,24 +80,24 @@ function generateSkyAndWind(rng) {
     skyAndWind.sky = 'blue';
     skyAndWind.clouds = 'white';
     skyAndWind.sky_colour = 0x3498d8;
-    skyAndWind.horizon_colour = 0x75b1d8;
+    skyAndWind.horizon_colour = 0x4fa6de;
     skyAndWind.cloud_amount_large = rng.range(0, 10);
     skyAndWind.cloud_amount_medium = rng.range(0, 100);
     skyAndWind.cloud_amount_small = rng.range(0, 100);
     const skyType = rng.range(0, 2);
     const haze = rng.range(0, 2);
     if (haze) {
-        skyAndWind.horizon_colour = 0xffffff;
+        skyAndWind.horizon_colour = 0x8bc4e9;
         skyAndWind.haze = true;
     }
     if (skyType) {
         skyAndWind.sky = 'grey';
         skyAndWind.clouds = 'dark';
         skyAndWind.sky_colour = 0xe0e0ff;
-        skyAndWind.horizon_colour = 0x808080;
+        skyAndWind.horizon_colour = 0xb0b0df;
         skyAndWind.cloud_amount_large = 0;
         skyAndWind.cloud_amount_medium /= 2;
-        if (haze) skyAndWind.horizon_colour = 0x5d5dff;
+        if (haze) skyAndWind.horizon_colour = 0x808080;
     }
     return skyAndWind; 
 }

@@ -26,6 +26,26 @@ const screenLayout = {
         szmin: 75,
         szmax: 125,
         speedfactor: 1.0,
+    },
+    zindex: {
+        sky: 1,
+        hills_distant: 2,
+        clouds: 3,
+        horizon: 4,
+        background_ground: 5,
+        background_far: 6,
+        rails_distant: 7,
+        train_distant: 8,
+        background_close: 9,
+        rails_1: 10,
+        train_1: 11,
+        rails_2: 12,
+        train_2: 13,
+        rails_3: 14,
+        train_3: 15,
+        foreground: 16,
+        ui: 17,
+        ui_foreground: 18
     }
 }
 
@@ -690,7 +710,7 @@ class TrainAnimation {
     get leftPosition() { return this.#screenLayout.posLeftX; }
     set rightPosition(pos) { this.#screenLayout.posRightX = pos; }
     get rightPosition() { return this.#screenLayout.posRightX; }
-    set zOrder(z) { this.#screenLayout.z = zOrder; }
+    set zOrder(z) { this.#screenLayout.zOrder = z; }
     get zOrder() { return this.#screenLayout.zOrder; }
 
     get constants() {
@@ -712,7 +732,7 @@ class TrainAnimation {
         posLeftX: screenLayout.width,
         posRightX: screenLayout.height,
         scale: 1,
-        zOrder: 8
+        zOrder: 1
     };
     #sndLoop;
     #loadedImages;
@@ -957,7 +977,7 @@ class LandscapeAnimation {
             this.#config.clouds.type + "_" +
             cloudSize +
             (this.#config.clouds.windy ? "_windy" : "");
-        
+
 
         return this.#imageInventory.randomInCategory(cloudCategory, this.#rng);
     }
@@ -983,6 +1003,7 @@ class LandscapeAnimation {
         image.setScale(sz);
         image.setVelocity(speed, 0);
         image.setOrigin(0.5, 1);
+        image.setDepth(this.#screenLayout.zindex.clouds);
         if (rightToLeft) image.setScale(-sz, sz);
     }
 
@@ -1027,7 +1048,8 @@ class LandscapeAnimation {
             this.#config.colours.sky, this.#config.colours.sky,
             this.#config.colours.horizon, this.#config.colours.horizon, 1);
         graphics.fillRect(0, 0,
-            this.#screenLayout.width, this.#screenLayout.height);
+            this.#screenLayout.width, this.#screenLayout.horizonHeight);
+        graphics.setDepth(this.#screenLayout.zindex.sky);
         // Clouds
         for (let i = 0; i < this.#screenLayout.clouds.amount; i++) {
             let img = this.#scene.physics.add.image(0, 0, "placeholder");
@@ -1045,12 +1067,15 @@ class LandscapeAnimation {
         this.#scene.add.rectangle(0, this.#screenLayout.horizonHeight,
             this.#screenLayout.width,
             this.#screenLayout.height - this.#screenLayout.horizonHeight,
-            this.#config.colours.ground).setOrigin(0, 0);
+            this.#config.colours.ground).
+            setOrigin(0, 0).
+            setDepth(this.#screenLayout.zindex.background_ground);
         // Rails
         this.#scene.add.image(this.#screenLayout.width / 2,
             this.#screenLayout.railHeight1,
-            "rails").setScale(this.#screenLayout.railScale1);
-    }
+            "rails").setScale(this.#screenLayout.railScale1).
+            setDepth(this.#screenLayout.zindex.rails_2);
+        }
 
     #updateClouds() {
         const rightToLeft = (this.#config.clouds.speed < 0);
@@ -1058,7 +1083,6 @@ class LandscapeAnimation {
         this.#cloudImages.forEach(function (item, index, array) {
             if ((rightToLeft && item.x < -w) || (!rightToLeft && item.x > w * 2)) {
                 this.#makeCloud(array[index], false);
-                //console.log("redraw cloud", index);
             }
         }, this);
     }
@@ -1103,6 +1127,7 @@ class MainScene extends Phaser.Scene {
         this.#train.leftPosition = 0;
         this.#train.rightPosition = screenLayout.width;
         this.#train.railsPosition = screenLayout.trainWheelHeight;
+        this.#train.zOrder = screenLayout.zindex.train_2;
 
         this.#landscape = new LandscapeAnimation(
             this,
