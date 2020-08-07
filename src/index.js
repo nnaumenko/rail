@@ -1075,7 +1075,7 @@ class LandscapeAnimation {
             this.#screenLayout.railHeight1,
             "rails").setScale(this.#screenLayout.railScale1).
             setDepth(this.#screenLayout.zindex.rails_2);
-        }
+    }
 
     #updateClouds() {
         const rightToLeft = (this.#config.clouds.speed < 0);
@@ -1095,6 +1095,100 @@ class LandscapeAnimation {
     #assetsLoading;
     #rng;
     #cloudImages;
+};
+
+///////////////////////////////////////////////////////////////////////
+// class MainScene
+// Glues together individual visual and auto elements
+///////////////////////////////////////////////////////////////////////
+
+class MainMenu {
+    constructor(scene, layout) {
+        this.#elements = [];
+        this.#scene = scene;
+        this.#layout = layout;
+    }
+
+    get shown() { return this.#elements.length > 0; }
+
+    show() {
+        this.hide();
+        const x = this.#layout.width / 2;
+        const y = this.#layout.height / 2;
+        const ySpacing = 80;
+        const xSpacing = 120;
+        const xButton = 200;
+        const yButton = 50;
+        const menuDelay = 4000; // milliseconds
+        this.#addMenuItem(x, y - ySpacing, "GENERATE NEW", xButton, yButton, this.#generateNew);
+        this.#addMenuItem(x, y, "RESTART CURRENT", xButton, yButton, this.#restart);
+        this.#addMenuItem(x - xSpacing / 2, y + ySpacing, "GITHUB", xButton / 2, yButton, this.#github);
+        this.#addMenuItem(x + xSpacing / 2, y + ySpacing, "GITLAB", xButton / 2, yButton, this.#gitlab);
+        this.#timer =
+            this.#scene.time.delayedCall(menuDelay, this.hide, [], this);
+    }
+
+    #generateNew() {
+        this.hide();
+        const locationWithoutHash =
+            location.protocol + 
+            '//' +
+            location.hostname +
+            (location.port ? ":" + location.port : "") +
+            location.pathname +
+            (location.search ? location.search : "");
+        this.#openUrl(locationWithoutHash, false);
+    }
+
+    #restart() {
+        this.hide();
+        location.reload();
+    }
+
+    #github() {
+        this.hide();
+        this.#openUrl('https://github.com/nnaumenko/rail', true);
+    }
+
+    #gitlab() {
+        this.hide();
+        this.#openUrl('https://gitlab.com/nnaumenko/rail', true);
+    }
+
+    #addMenuItem(x, y, text, bx, by, handler) {
+        let rc = this.#scene.add.rectangle(
+            x - bx / 2, y - by / 2,
+            bx, by,
+            0x505080)
+            .setOrigin(0, 0)
+            .setDepth(this.#layout.zindex.ui)
+            .setInteractive().on('pointerdown', handler, this);
+        this.#elements.push(rc);
+
+        let tx =
+            this.#scene.add.text(x, y, text).
+                setDepth(this.#layout.zindex.ui).
+                setOrigin(0.5, 0.5);
+        this.#elements.push(tx);
+    }
+
+    #openUrl(url, newWindow) {
+        window.open(url, newWindow ? '_blank' : '_self');
+    }
+
+    hide() {
+        this.#elements.forEach(element => {
+            element.destroy();
+        });
+        this.#elements = [];
+        if (this.#timer) this.#timer.remove();
+        this.#timer = undefined;
+    }
+
+    #elements;
+    #scene;
+    #layout;
+    #timer;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -1136,6 +1230,8 @@ class MainScene extends Phaser.Scene {
             screenLayout,
             this.#landscapeRandGen
         );
+
+        this.#mainmenu = new MainMenu(this, screenLayout);
     };
     #imgInventory;
     #sndInventory;
@@ -1143,6 +1239,7 @@ class MainScene extends Phaser.Scene {
     #trainRandGen;
     #train;
     #landscape;
+    #mainmenu;
 
     preload() {
         this.load.image('placeholder', 'assets/misc/placeholder.png')
@@ -1165,6 +1262,13 @@ class MainScene extends Phaser.Scene {
 
         this.#train.setup(trainConfig);
         //timerText = this.add.text(32, 32);
+        this.input.on('pointerdown', () => { 
+            if (this.#mainmenu.shown) {
+                this.#mainmenu.hide();
+            } else {
+                this.#mainmenu.show();
+            } 
+        });
     }
 
     update() {
