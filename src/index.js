@@ -16,7 +16,7 @@ const screenLayout = {
     width: 1024,
     height: 576,
     horizonHeight: 199,
-    railHeight1: 452,
+    railHeight1: 445,
     railScale1: 1.4,
     trainWheelHeight: 455,
     clouds: {
@@ -354,6 +354,8 @@ import cloud_dark_small_windy_3 from "./assets/clouds-dark/cloud_small_windy_03.
 import cloud_dark_small_windy_4 from "./assets/clouds-dark/cloud_small_windy_04.png";
 
 import rails_image from "./assets/landscape/rails.png";
+import rails_high_speed_image from "./assets/landscape/rails_high_speed.png";
+import railway_crossing_image from "./assets/landscape/railway_crossing.png";
 
 function initImageInventory() {
     var img = new Assets.Inventory();
@@ -1025,9 +1027,17 @@ function initImageInventory() {
         cloud_dark_small_windy_4,
     ], {});
 
-    img.addType("rails", [
+    img.addType("rails_railway", [
         rails_image
     ], {});
+
+    img.addType("rails_railway_high_speed", [
+        rails_high_speed_image
+    ], {});
+
+    img.addType("rails_railway_crossing", [
+        railway_crossing_image
+    ], {fullscreen: true});
 
     return img;
 };
@@ -1403,10 +1413,10 @@ class LandscapeAnimation {
         }, this);
     }
 
-    #loadRails() {
-        const ids = this.#imageInventory.getAllIdsInCategory("rails");
+    #loadRails(type) {
+        const ids = this.#imageInventory.getAllIdsInCategory(type);
         const imgPath = this.#imageInventory.getPathById(ids[0]);
-        this.#scene.load.image("rails", imgPath);
+        this.#scene.load.image(type, imgPath);    
     }
 
     #getCloudSpriteId() {
@@ -1463,7 +1473,7 @@ class LandscapeAnimation {
 
         console.debug("Loading landscape images");
         this.#loadClouds();
-        this.#loadRails();
+        this.#loadRails('rails_' + this.#config.type);
 
         console.debug("Loading landscape sounds");
 
@@ -1522,9 +1532,15 @@ class LandscapeAnimation {
             setOrigin(0, 0).
             setDepth(this.#screenLayout.zindex.background_ground);
         // Rails
-        this.#scene.add.image(this.#screenLayout.width / 2,
-            this.#screenLayout.railHeight1,
-            "rails").setScale(this.#screenLayout.railScale1).
+        const railType = 'rails_' + this.#config.type;
+        const railsId = this.#imageInventory.getAllIdsInCategory(railType)[0];
+        const fullscreen = this.#imageInventory.getAttributes(railsId).fullscreen;
+        const railHt = fullscreen ? 
+                       this.#screenLayout.height / 2 : 
+                       this.#screenLayout.railHeight1;
+        const scale = fullscreen ? 1.0 : this.#screenLayout.railScale1;
+        this.#scene.add.image(this.#screenLayout.width / 2, railHt, railType).
+            setScale(scale).
             setDepth(this.#screenLayout.zindex.rails_2);
     }
 

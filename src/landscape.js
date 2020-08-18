@@ -9,10 +9,7 @@
 function generate(img, snd, rng) {
     let landscape = { colours: {}, clouds: {} };
     // Landscape
-    // Currently not used but generated anyway to keep RNG sequence
-    // The plan is to use to generate surroundings
-    let type = generateType(rng);
-    landscape.type = 'railway';
+    landscape.type = generateType(rng);
     // Season: ground colours, tree appearance, etc
     let season = generateSeason(rng);
     landscape.season = season.description;
@@ -35,7 +32,12 @@ function generate(img, snd, rng) {
 }
 
 function generateType(rng) {
-    let type = rng.range(0, 2);
+    let type = rng.range(0, 3);
+    switch (type) {
+        case 0: return 'railway';
+        case 1: return 'railway_high_speed';
+        case 2: return 'railway_crossing';
+    }
     return type;
 }
 
